@@ -1,61 +1,94 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useInView, useMotionValue, useTransform, animate } from 'framer-motion'
 import {
-  ArrowRight,
-  Play,
-  ShieldCheck,
-  Radar,
-  Brain,
-  Gavel,
-  CheckCircle2,
-  Cpu,
-  Sparkles,
-  Terminal,
-  ChevronRight,
-  Lock,
-  GitBranch,
-  Activity,
+  ArrowRight, ArrowUpRight, Play, Pause, RotateCcw, Check, ChevronRight, Circle,
+  Radar, Brain, Sparkles, Gavel, Cpu, Activity, Shield, Lock, GitBranch, FileCheck2,
+  Server, Building2, Landmark, Phone, ShoppingBag, Factory, Truck, Stethoscope,
+  Bell, MessagesSquare, Ticket, GitPullRequest, ClipboardList, FileSearch, Workflow,
+  Zap, Users, KeyRound, Database, Boxes, Layers, TerminalSquare, LineChart,
 } from 'lucide-react'
 
-/* -----------------------------------------------------------
-   WAIOS Landing — Phase 1 (aha moment)
-   Sections: Hero, Autonomous Loop, Live Operation, Final CTA
-   ----------------------------------------------------------- */
+/* ========================================================================
+   WAIOS · Final Landing Page
+   ======================================================================== */
 
-const LOOP_PHASES = [
-  { key: 'discover',   label: 'Discover',    icon: Radar,        blurb: 'Signals, alerts, and anomalies detected across connected enterprise systems.' },
-  { key: 'understand', label: 'Understand',  icon: Brain,        blurb: 'Operational context assembled. Root cause analyzed against the CMDB and knowledge.' },
-  { key: 'decide',     label: 'Decide',      icon: Sparkles,     blurb: 'Reasoning produces a remediation plan scored against risk, policy and impact.' },
-  { key: 'approve',    label: 'Approve',     icon: Gavel,        blurb: 'Governed by identity, policy and CAB workflow — human where it must be, automated where it can be.' },
-  { key: 'act',        label: 'Act',         icon: Cpu,          blurb: 'Controlled execution across cloud, workloads and endpoints — without static credentials.' },
-  { key: 'learn',      label: 'Learn',       icon: Activity,     blurb: 'Every decision and action recorded to the Forensic BlackBox and knowledge graph.' },
+/* ---------- Reusable ---------- */
+const EASE = [0.16, 1, 0.3, 1]
+
+function Reveal({ children, delay = 0, y = 24, className = '' }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-80px' })
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y }}
+      transition={{ duration: 0.7, delay, ease: EASE }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+function Counter({ to, duration = 1.6, format = (v) => Math.round(v).toLocaleString(), prefix = '', suffix = '' }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-40px' })
+  const mv = useMotionValue(0)
+  const [display, setDisplay] = useState(format(0))
+  useEffect(() => {
+    if (!inView) return
+    const controls = animate(mv, to, { duration, ease: EASE })
+    const unsub = mv.on('change', (v) => setDisplay(format(v)))
+    return () => { controls.stop(); unsub() }
+  }, [inView, to])
+  return <span ref={ref}>{prefix}{display}{suffix}</span>
+}
+
+function LiveDot({ className = 'text-emerald-400' }) {
+  return (
+    <span className={`relative inline-block h-1.5 w-1.5 rounded-full ${className} pulse-dot`}>
+      <span className="absolute inset-0 rounded-full bg-current" />
+    </span>
+  )
+}
+
+/* ---------- Data ---------- */
+const LOOP = [
+  { key: 'discover',   label: 'Discover',   icon: Radar,    caption: 'Signals detected across every connected enterprise system.' },
+  { key: 'understand', label: 'Understand', icon: Brain,    caption: 'Context assembled. Root cause reasoned against your CMDB and knowledge.' },
+  { key: 'decide',     label: 'Decide',     icon: Sparkles, caption: 'A remediation plan scored against risk, policy and impact.' },
+  { key: 'approve',    label: 'Approve',    icon: Gavel,    caption: 'Governed by identity, policy, and CAB workflow.' },
+  { key: 'act',        label: 'Act',        icon: Cpu,      caption: 'Controlled execution, without static credentials.' },
+  { key: 'learn',      label: 'Learn',      icon: Activity, caption: 'Signed, immutable record written to the Forensic BlackBox.' },
 ]
 
-function NavBar() {
+/* ============================== NAV ============================== */
+function Nav() {
   return (
-    <header className="sticky top-0 z-40 border-b hairline backdrop-blur-md bg-[#08090B]/70">
-      <div className="container flex h-14 items-center justify-between">
-        <a href="#top" className="flex items-center gap-2">
-          <div className="relative h-7 w-7 rounded-md bg-gradient-to-br from-waios-orange to-waios-amber grid place-items-center">
-            <div className="h-3 w-3 rounded-sm bg-waios-ink" />
-            <div className="absolute inset-0 rounded-md ring-1 ring-white/20" />
+    <header className="sticky top-0 z-50 hairline-b backdrop-blur-xl bg-black/55">
+      <div className="max-w-6xl mx-auto flex h-14 items-center justify-between px-6">
+        <a href="#top" className="flex items-center gap-2.5">
+          <div className="h-6 w-6 rounded-md bg-white grid place-items-center">
+            <div className="h-2 w-2 rounded-[2px] bg-black" />
           </div>
-          <span className="text-sm font-semibold tracking-wide text-waios-text">WAIOS</span>
-          <span className="hidden md:inline text-[11px] uppercase tracking-[0.18em] text-waios-muted ml-1">Autonomous Enterprise OS</span>
+          <span className="text-[15px] font-medium tracking-tight text-white">WAIOS</span>
+          <span className="hidden sm:inline text-[11px] text-dimmer ml-1">/ Autonomous Enterprise OS</span>
         </a>
-        <nav className="hidden md:flex items-center gap-7 text-sm text-waios-muted">
-          <a href="#loop" className="hover:text-waios-text transition">The Loop</a>
-          <a href="#live" className="hover:text-waios-text transition">Live Operation</a>
-          <a href="#architecture" className="hover:text-waios-text transition">Architecture</a>
-          <a href="#contact" className="hover:text-waios-text transition">Contact</a>
+        <nav className="hidden md:flex items-center gap-8 text-[13.5px] text-dim">
+          <a href="#loop" className="hover:text-white transition">Loop</a>
+          <a href="#live" className="hover:text-white transition">In Action</a>
+          <a href="#differentiators" className="hover:text-white transition">Why WAIOS</a>
+          <a href="#system" className="hover:text-white transition">System</a>
+          <a href="#contact" className="hover:text-white transition">Contact</a>
         </nav>
-        <div className="flex items-center gap-2">
-          <a href="#live" className="hidden sm:inline-flex items-center gap-1.5 text-sm text-waios-text/90 hover:text-white transition px-3 py-1.5 rounded-md border hairline">
-            <Play className="h-3.5 w-3.5" /> Watch
-          </a>
-          <a href="#contact" className="inline-flex items-center gap-1.5 text-sm font-medium px-3.5 py-1.5 rounded-md bg-waios-orange text-black hover:brightness-110 transition">
+        <div className="flex items-center gap-3">
+          <span className="hidden sm:inline-flex items-center gap-1.5 text-[11.5px] text-dimmer">
+            <LiveDot /> live: 4,281 events today
+          </span>
+          <a href="#contact" className="inline-flex items-center gap-1.5 rounded-full bg-white text-black px-3.5 py-1.5 text-[13px] font-medium hover:bg-white/90 transition">
             Book a demo <ArrowRight className="h-3.5 w-3.5" />
           </a>
         </div>
@@ -64,223 +97,512 @@ function NavBar() {
   )
 }
 
-/* ---------- HERO ---------- */
-function LoopOrbit({ active = 0 }) {
-  // Subtle rotating loop visual: 6 nodes on a circle
-  const nodes = LOOP_PHASES
-  const R = 128
+/* ============================== HERO ============================== */
+function MiniConsole() {
+  // Small "live" WAIOS console panel used as hero visual.
+  const [rate, setRate] = useState(4.9)
+  const [approved, setApproved] = useState(false)
+  const [phase, setPhase] = useState(0)
+  useEffect(() => {
+    const t = setInterval(() => {
+      setPhase((p) => (p + 1) % 6)
+      setRate((r) => Math.max(0.3, Math.min(5.2, r + (Math.random() - 0.55) * 1.1)))
+      setApproved((a) => (Math.random() > 0.6 ? true : a))
+    }, 1400)
+    return () => clearInterval(t)
+  }, [])
+  const phaseLabels = ['DISCOVER','UNDERSTAND','DECIDE','APPROVE','ACT','LEARN']
+  const spark = useMemo(() => {
+    const pts = []
+    let v = 0.5
+    for (let i = 0; i < 32; i++) { v = Math.max(0.05, Math.min(0.95, v + (Math.random() - 0.5) * 0.25)); pts.push(v) }
+    return pts
+  }, [])
   return (
-    <div className="relative mx-auto h-[320px] w-[320px] md:h-[380px] md:w-[380px]">
-      <div className="absolute inset-0 rounded-full border border-white/5" />
-      <div className="absolute inset-6 rounded-full border border-white/5" />
-      <div className="absolute inset-14 rounded-full border border-dashed border-white/10" />
-      {/* rotating sweep */}
-      <motion.div
-        className="absolute inset-0"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 22, repeat: Infinity, ease: 'linear' }}
-      >
-        <div className="absolute left-1/2 top-1/2 h-[1px] w-[46%] origin-left"
-          style={{ background: 'linear-gradient(90deg, rgba(255,107,26,0.65), transparent)' }} />
-      </motion.div>
+    <div className="relative w-full">
+      <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-white/[0.03] to-transparent blur-2xl" />
+      <div className="relative rounded-2xl border hairline bg-[#0A0A0C] overflow-hidden">
+        {/* header */}
+        <div className="flex items-center justify-between px-4 h-10 hairline-b">
+          <div className="flex items-center gap-2">
+            <div className="h-2 w-2 rounded-full bg-white/15" />
+            <div className="h-2 w-2 rounded-full bg-white/15" />
+            <div className="h-2 w-2 rounded-full bg-white/15" />
+            <span className="ml-2 font-mono text-[11px] text-white/50">waios.console · eu‑west‑1</span>
+          </div>
+          <span className="inline-flex items-center gap-1.5 text-[10.5px] text-white/60">
+            <LiveDot /> live
+          </span>
+        </div>
 
-      {/* center */}
-      <div className="absolute inset-0 grid place-items-center">
-        <div className="h-20 w-20 rounded-full glass-strong grid place-items-center">
-          <div className="text-[10px] uppercase tracking-[0.2em] text-waios-muted">WAIOS</div>
+        <div className="grid grid-cols-5 gap-0">
+          {/* left: incident feed */}
+          <div className="col-span-3 hairline-r p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="text-[10.5px] tracking-[0.18em] uppercase text-white/40">Active incident</div>
+              <span className="text-[10.5px] font-mono text-white/45">INC‑88214</span>
+            </div>
+            <div className="text-[14px] text-white font-medium">payments-api-prod, elevated error rate</div>
+            <div className="mt-1 text-[12px] text-white/55">Detected 09:14:22 · svc-pay-01</div>
+
+            {/* sparkline */}
+            <div className="mt-4 rounded-lg border hairline p-3 bg-black/40">
+              <div className="flex items-baseline justify-between">
+                <div>
+                  <div className="text-[10.5px] uppercase tracking-widest text-white/40">Error rate</div>
+                  <div className="text-[22px] font-mono text-white mt-0.5">{rate.toFixed(1)}%</div>
+                </div>
+                <div className="text-right">
+                  <div className="text-[10.5px] uppercase tracking-widest text-white/40">SLO</div>
+                  <div className="text-[12.5px] font-mono text-white/70 mt-0.5">2.0%</div>
+                </div>
+              </div>
+              <svg viewBox="0 0 120 32" className="mt-2 w-full h-10" preserveAspectRatio="none">
+                <polyline
+                  fill="none"
+                  stroke="#FF6B1A"
+                  strokeWidth="1.5"
+                  points={spark.map((v, i) => `${(i / (spark.length - 1)) * 120},${(1 - v) * 32}`).join(' ')}
+                />
+                <polyline
+                  fill="url(#g1)"
+                  stroke="none"
+                  points={[`0,32`, ...spark.map((v, i) => `${(i / (spark.length - 1)) * 120},${(1 - v) * 32}`), `120,32`].join(' ')}
+                  opacity="0.35"
+                />
+                <defs>
+                  <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stopColor="#FF6B1A" stopOpacity="0.5"/>
+                    <stop offset="100%" stopColor="#FF6B1A" stopOpacity="0"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+
+            {/* phase pill row */}
+            <div className="mt-4 flex items-center gap-1">
+              {phaseLabels.map((p, i) => (
+                <div
+                  key={p}
+                  className={`flex-1 h-1 rounded-full transition-all duration-500 ${
+                    i < phase ? 'bg-white/70' : i === phase ? 'bg-[#FF6B1A]' : 'bg-white/8'
+                  }`}
+                />
+              ))}
+            </div>
+            <div className="mt-2 flex items-center justify-between text-[10.5px] text-white/45 font-mono">
+              <span>DISCOVER</span><span>LEARN</span>
+            </div>
+          </div>
+
+          {/* right: approval + status */}
+          <div className="col-span-2 p-4 space-y-3">
+            <div className="rounded-lg border hairline p-3 bg-black/40">
+              <div className="flex items-center justify-between">
+                <div className="text-[10.5px] uppercase tracking-widest text-white/40">Approval</div>
+                <span className={`text-[10px] font-mono ${approved ? 'text-emerald-400' : 'text-amber-400'}`}>
+                  {approved ? 'signed' : 'awaiting'}
+                </span>
+              </div>
+              <div className="mt-2 flex items-center gap-2">
+                <div className="flex -space-x-2">
+                  <div className="h-6 w-6 rounded-full bg-white/10 border hairline grid place-items-center text-[10px] text-white/80">SM</div>
+                  <div className="h-6 w-6 rounded-full bg-white/10 border hairline grid place-items-center text-[10px] text-white/80">JK</div>
+                </div>
+                <div className="text-[11.5px] text-white/70">CAB · 1‑click</div>
+              </div>
+              <AnimatePresence>
+                {approved && (
+                  <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} className="mt-2 flex items-center gap-1.5 text-[11px] text-emerald-400">
+                    <Check className="h-3 w-3" /> signer s.mehta@corp
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <div className="rounded-lg border hairline p-3 bg-black/40">
+              <div className="text-[10.5px] uppercase tracking-widest text-white/40">Health checks</div>
+              <div className="mt-2 grid grid-cols-4 gap-1.5">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <div key={i} className={`h-4 rounded-sm ${i <= phase + 1 ? 'bg-emerald-400/80' : 'bg-white/10'}`} />
+                ))}
+              </div>
+              <div className="mt-2 text-[11px] text-white/60 font-mono">{Math.min(8, phase + 2)}/8 passing</div>
+            </div>
+
+            <div className="rounded-lg border hairline p-3 bg-black/40">
+              <div className="text-[10.5px] uppercase tracking-widest text-white/40">Audit</div>
+              <div className="mt-2 flex items-center gap-2">
+                <FileCheck2 className="h-4 w-4 text-white/70" />
+                <div className="text-[11.5px] text-white/70 font-mono">run‑id 8f2c…a91</div>
+              </div>
+              <div className="mt-1 text-[10.5px] text-white/45">signed, immutable, BlackBox</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {nodes.map((n, i) => {
-        const angle = (i / nodes.length) * Math.PI * 2 - Math.PI / 2
-        const x = Math.cos(angle) * R
-        const y = Math.sin(angle) * R
-        const isActive = i === active
-        const Icon = n.icon
-        return (
-          <div
-            key={n.key}
-            className="absolute left-1/2 top-1/2"
-            style={{ transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))` }}
-          >
-            <div className={`flex flex-col items-center gap-1.5 transition-all duration-500 ${isActive ? 'scale-110' : 'opacity-70'}`}>
-              <div className={`h-11 w-11 rounded-xl grid place-items-center border ${isActive ? 'bg-waios-orange text-black border-waios-orange glow-orange' : 'glass text-waios-text/80'}`}>
-                <Icon className="h-5 w-5" />
-              </div>
-              <div className={`text-[10px] uppercase tracking-widest ${isActive ? 'text-waios-orange' : 'text-waios-muted'}`}>{n.label}</div>
-            </div>
-          </div>
-        )
-      })}
+      {/* floating chip */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.8, ease: EASE }}
+        className="absolute -left-6 md:-left-10 bottom-10 rounded-full border hairline bg-black/80 backdrop-blur px-3 py-1.5 text-[11.5px] text-white/80 shadow-xl drift"
+      >
+        <span className="inline-flex items-center gap-1.5"><LiveDot /> auto‑resolved in 00:00:31</span>
+      </motion.div>
     </div>
   )
 }
 
 function Hero() {
-  const [active, setActive] = useState(0)
-  useEffect(() => {
-    const t = setInterval(() => setActive((a) => (a + 1) % LOOP_PHASES.length), 1800)
-    return () => clearInterval(t)
-  }, [])
   return (
-    <section id="top" className="relative overflow-hidden">
-      <div className="absolute inset-0 waios-grid opacity-60 pointer-events-none" />
-      <div className="absolute inset-x-0 top-0 h-[520px] pointer-events-none"
-        style={{ background: 'radial-gradient(600px 260px at 50% 0%, rgba(255,107,26,0.10), transparent 70%)' }} />
+    <section id="top" className="relative overflow-hidden noise grain">
+      <div className="max-w-6xl mx-auto px-6 pt-20 md:pt-28 pb-20 md:pb-28">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          <div className="lg:col-span-6">
+            <Reveal>
+              <div className="inline-flex items-center gap-2 rounded-full border hairline px-3 py-1 text-[11.5px] text-white/70">
+                <LiveDot />
+                Autonomous Ecosystem CMDB, governed by design
+              </div>
+            </Reveal>
+            <Reveal delay={0.05}>
+              <h1 className="mt-6 text-[44px] md:text-[76px] leading-[0.98] font-semibold tracking-[-0.03em] text-white text-balance">
+                From detection
+                <br />
+                to resolution.
+                <br />
+                <span className="text-dim">Autonomously.</span>
+              </h1>
+            </Reveal>
+            <Reveal delay={0.12}>
+              <p className="mt-6 max-w-xl text-[17px] md:text-[19px] leading-relaxed text-dim">
+                WAIOS is the operating layer that connects your enterprise systems, AI reasoning, governance,
+                approval, execution, and learning into one accountable operational loop.
+              </p>
+            </Reveal>
+            <Reveal delay={0.18}>
+              <div className="mt-8 flex items-center gap-3">
+                <a href="#live" className="inline-flex items-center gap-2 rounded-full bg-white text-black px-5 py-3 text-[14px] font-medium hover:bg-white/90 transition">
+                  See WAIOS in action <ArrowRight className="h-4 w-4" />
+                </a>
+                <a href="#contact" className="inline-flex items-center gap-2 rounded-full border hairline px-5 py-3 text-[14px] font-medium text-white/90 hover:bg-white/5 transition">
+                  Book a demo
+                </a>
+              </div>
+            </Reveal>
 
-      <div className="container relative pt-16 pb-20 md:pt-24 md:pb-28">
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-8 items-center">
-          <div className="lg:col-span-7">
-            <div className="inline-flex items-center gap-2 rounded-full border hairline glass px-3 py-1 text-xs text-waios-muted">
-              <span className="h-1.5 w-1.5 rounded-full bg-waios-orange animate-pulse-soft" />
-              Autonomous Ecosystem CMDB · Enterprise Linux · Governed by design
-            </div>
-            <h1 className="mt-5 text-4xl md:text-6xl font-semibold tracking-tight text-white text-balance leading-[1.05]">
-              The Operating Layer for
-              <br className="hidden md:block" />{' '}
-              <span className="bg-gradient-to-r from-waios-orange to-waios-amber bg-clip-text text-transparent">
-                Autonomous Enterprise Operations.
-              </span>
-            </h1>
-            <p className="mt-5 max-w-2xl text-lg text-waios-muted text-balance">
-              WAIOS connects your enterprise systems, AI reasoning, governance, human approval, execution and learning
-              into <span className="text-waios-text">one accountable operational loop</span> — from detection to resolution, autonomously.
-            </p>
-
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a href="#live" className="inline-flex items-center gap-2 rounded-md bg-waios-orange text-black px-5 py-3 font-medium hover:brightness-110 transition">
-                See WAIOS in Action <ArrowRight className="h-4 w-4" />
-              </a>
-              <a href="#architecture" className="inline-flex items-center gap-2 rounded-md border hairline glass px-5 py-3 text-waios-text hover:bg-white/5 transition">
-                Explore the Architecture
-              </a>
-            </div>
-
-            <div className="mt-10 grid grid-cols-3 gap-6 max-w-xl">
-              {[
-                { icon: ShieldCheck, k: 'Governed', v: 'Policy, identity & CAB approval' },
-                { icon: Lock,        k: 'Credential-less', v: 'No static root credentials' },
-                { icon: GitBranch,   k: 'Auditable', v: 'Forensic BlackBox trail' },
-              ].map(({ icon: I, k, v }) => (
-                <div key={k} className="flex items-start gap-3">
-                  <div className="h-8 w-8 rounded-md glass grid place-items-center text-waios-orange">
-                    <I className="h-4 w-4" />
+            <Reveal delay={0.24}>
+              <div className="mt-10 grid grid-cols-3 gap-4 max-w-lg">
+                {[
+                  { k: 'Governed',       v: 'Policy, identity, CAB' },
+                  { k: 'Credential‑less', v: 'No static root creds' },
+                  { k: 'Auditable',      v: 'Forensic BlackBox' },
+                ].map((c) => (
+                  <div key={c.k} className="rounded-lg border hairline p-3">
+                    <div className="text-[12px] text-white">{c.k}</div>
+                    <div className="text-[11px] text-dimmer mt-0.5">{c.v}</div>
                   </div>
-                  <div>
-                    <div className="text-sm text-white">{k}</div>
-                    <div className="text-xs text-waios-muted">{v}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </Reveal>
           </div>
 
-          <div className="lg:col-span-5">
-            <div className="relative">
-              <div className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-waios-orange/10 via-transparent to-transparent blur-2xl" />
-              <div className="relative rounded-2xl border hairline glass-strong p-6 md:p-8">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="text-[10px] uppercase tracking-[0.22em] text-waios-muted">The WAIOS Loop</div>
-                  <div className="text-[10px] text-waios-muted font-mono">phase · {String(active + 1).padStart(2, '0')}/06</div>
-                </div>
-                <LoopOrbit active={active} />
-                <div className="mt-4 min-h-[48px]">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={active}
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -6 }}
-                      transition={{ duration: 0.35 }}
-                      className="text-sm text-waios-text/90"
-                    >
-                      <span className="text-waios-orange font-medium">{LOOP_PHASES[active].label}.</span>{' '}
-                      <span className="text-waios-muted">{LOOP_PHASES[active].blurb}</span>
-                    </motion.div>
-                  </AnimatePresence>
-                </div>
-              </div>
-            </div>
+          <div className="lg:col-span-6">
+            <Reveal delay={0.1}>
+              <MiniConsole />
+            </Reveal>
           </div>
         </div>
       </div>
 
-      <div className="divider-x h-px w-full" />
+      {/* Live ticker strip */}
+      <div className="hairline-t hairline-b bg-black/40">
+        <div className="max-w-6xl mx-auto px-6 py-3 flex items-center gap-6 md:gap-10 overflow-hidden text-[12px] font-mono text-white/60">
+          <span className="inline-flex items-center gap-2 text-white/80"><LiveDot /> live ops</span>
+          <span><Counter to={4281} />&nbsp;events handled today</span>
+          <span className="text-white/25">·</span>
+          <span><Counter to={99.98} format={(v) => v.toFixed(2)} suffix="%" />&nbsp;autonomously resolved</span>
+          <span className="text-white/25">·</span>
+          <span>avg <Counter to={34} suffix="s" /> from signal to signed audit</span>
+          <span className="text-white/25">·</span>
+          <span>0 static credentials in flight</span>
+        </div>
+      </div>
     </section>
   )
 }
 
-/* ---------- LOOP SECTION ---------- */
-function LoopSection() {
-  const [active, setActive] = useState(0)
-  useEffect(() => {
-    const t = setInterval(() => setActive((a) => (a + 1) % LOOP_PHASES.length), 2200)
-    return () => clearInterval(t)
-  }, [])
+/* ============================== INDUSTRIES MARQUEE ============================== */
+function Industries() {
+  const items = [
+    { icon: Landmark,   label: 'Banking' },
+    { icon: Shield,     label: 'Insurance' },
+    { icon: Phone,      label: 'Telecom' },
+    { icon: ShoppingBag,label: 'Retail' },
+    { icon: Factory,    label: 'Manufacturing' },
+    { icon: Building2,  label: 'Public Sector' },
+    { icon: Stethoscope,label: 'Healthcare' },
+    { icon: Truck,      label: 'Logistics' },
+    { icon: Server,     label: 'Cloud Ops' },
+  ]
+  const doubled = [...items, ...items]
   return (
-    <section id="loop" className="relative py-24 md:py-32">
-      <div className="container">
-        <div className="max-w-3xl">
-          <div className="text-[11px] uppercase tracking-[0.22em] text-waios-orange">The core mechanism</div>
-          <h2 className="mt-3 text-3xl md:text-5xl font-semibold tracking-tight text-white text-balance">
-            One operational event. One accountable chain of reasoning.
-          </h2>
-          <p className="mt-4 text-waios-muted text-lg text-balance">
-            Every operation in WAIOS travels through the same six-phase loop — the same one an experienced operator would follow,
-            executed with AI reasoning and enterprise-grade control.
-          </p>
-        </div>
-
-        <div className="mt-14 relative">
-          {/* Horizontal connector */}
-          <div className="hidden md:block absolute left-0 right-0 top-[54px] h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.12) 12%, rgba(255,255,255,0.12) 88%, transparent)' }} />
-
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-4 md:gap-2">
-            {LOOP_PHASES.map((p, i) => {
-              const Icon = p.icon
-              const isActive = i === active
+    <section className="py-14 hairline-b">
+      <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row md:items-center gap-6">
+        <div className="text-[12px] tracking-[0.22em] uppercase text-dimmer md:w-56 shrink-0">Built for the operations of</div>
+        <div className="relative overflow-hidden mask-fade-r flex-1">
+          <div className="marquee-track flex items-center gap-12 whitespace-nowrap">
+            {doubled.map((it, i) => {
+              const I = it.icon
               return (
-                <button
-                  type="button"
-                  key={p.key}
-                  onClick={() => setActive(i)}
-                  className="group text-left focus:outline-none"
-                >
-                  <div className="flex flex-col items-center">
-                    <div className={`relative h-[108px] w-full rounded-xl border transition-all duration-500 grid place-items-center
-                      ${isActive ? 'border-waios-orange/60 bg-gradient-to-b from-waios-orange/[0.12] to-transparent' : 'hairline glass'}`}>
-                      <div className={`h-12 w-12 rounded-lg grid place-items-center border transition-colors
-                        ${isActive ? 'bg-waios-orange text-black border-waios-orange' : 'border-white/10 text-waios-text/80'}`}>
-                        <Icon className="h-5 w-5" />
-                      </div>
-                      <div className="absolute top-2 left-2 text-[10px] font-mono text-waios-muted">0{i + 1}</div>
-                    </div>
-                    <div className={`mt-3 text-sm font-medium ${isActive ? 'text-white' : 'text-waios-text/80'}`}>{p.label}</div>
-                  </div>
-                </button>
+                <div key={i} className="inline-flex items-center gap-2 text-white/70">
+                  <I className="h-4 w-4" />
+                  <span className="text-[14px] tracking-tight">{it.label}</span>
+                </div>
               )
             })}
           </div>
+        </div>
+      </div>
+    </section>
+  )
+}
 
-          <div className="mt-8 rounded-xl border hairline glass p-5 md:p-6">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={active}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.3 }}
-                className="flex items-start gap-4"
-              >
-                <div className="h-9 w-9 rounded-md bg-waios-orange text-black grid place-items-center flex-shrink-0">
-                  <ChevronRight className="h-4 w-4" />
+/* ============================== PROBLEM ============================== */
+function Problem() {
+  const scattered = [
+    { icon: Bell,             label: 'Monitoring' },
+    { icon: Ticket,           label: 'Ticketing' },
+    { icon: MessagesSquare,   label: 'Approval chats' },
+    { icon: ClipboardList,    label: 'Runbooks' },
+    { icon: GitPullRequest,   label: 'Change mgmt' },
+    { icon: FileSearch,       label: 'Postmortems' },
+    { icon: KeyRound,         label: 'Credentials' },
+    { icon: Workflow,         label: 'Manual glue' },
+  ]
+  return (
+    <section className="relative py-24 md:py-32 hairline-b">
+      <div className="max-w-6xl mx-auto px-6">
+        <Reveal>
+          <div className="text-[12px] tracking-[0.24em] uppercase text-dimmer">The problem</div>
+          <h2 className="mt-5 text-[34px] md:text-[56px] leading-[1.02] font-semibold tracking-[-0.025em] text-white text-balance max-w-3xl">
+            Enterprise operations are fragmented
+            <span className="text-dim"> across tools, people, and time zones.</span>
+          </h2>
+        </Reveal>
+
+        <div className="mt-16 grid lg:grid-cols-2 gap-8 items-stretch">
+          {/* Left: scattered */}
+          <Reveal>
+            <div className="relative rounded-2xl border hairline p-8 h-full bg-black/40 dot-grid overflow-hidden">
+              <div className="text-[11px] tracking-widest uppercase text-dimmer">Today</div>
+              <div className="mt-2 text-white text-[18px] font-medium">Eight tools. One incident. Zero accountability.</div>
+              <div className="mt-8 grid grid-cols-4 gap-3">
+                {scattered.map((s, i) => {
+                  const I = s.icon
+                  return (
+                    <motion.div
+                      key={s.label}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: '-40px' }}
+                      transition={{ duration: 0.5, delay: i * 0.05, ease: EASE }}
+                      className="rounded-lg border hairline bg-black/60 p-3 flex flex-col items-start gap-2 card-hover"
+                      style={{ transform: `rotate(${(i % 3) - 1}deg)` }}
+                    >
+                      <div className="h-7 w-7 rounded-md bg-white/5 grid place-items-center text-white/70"><I className="h-3.5 w-3.5" /></div>
+                      <div className="text-[11.5px] text-white/80">{s.label}</div>
+                    </motion.div>
+                  )
+                })}
+              </div>
+              <div className="mt-6 flex items-center gap-2 text-[12px] text-white/50">
+                <Circle className="h-3 w-3 text-rose-400" /> Handoffs lose context. Approvals stall. Postmortems are stories, not records.
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Right: unified */}
+          <Reveal delay={0.1}>
+            <div className="relative rounded-2xl border hairline p-8 h-full bg-[#0A0A0C] overflow-hidden">
+              <div className="text-[11px] tracking-widest uppercase text-[#FF6B1A]">With WAIOS</div>
+              <div className="mt-2 text-white text-[18px] font-medium">One operational loop. One accountable chain.</div>
+
+              <div className="mt-8 relative h-[220px] grid place-items-center">
+                <svg viewBox="0 0 400 220" className="absolute inset-0 w-full h-full">
+                  {Array.from({ length: 8 }).map((_, i) => {
+                    const angle = (i / 8) * Math.PI * 2
+                    const x = 200 + Math.cos(angle) * 130
+                    const y = 110 + Math.sin(angle) * 80
+                    return (
+                      <motion.line
+                        key={i}
+                        x1={x} y1={y} x2={200} y2={110}
+                        stroke="rgba(255,255,255,0.18)"
+                        strokeWidth="1"
+                        strokeDasharray="3 3"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        whileInView={{ pathLength: 1, opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.2 + i * 0.05 }}
+                      />
+                    )
+                  })}
+                </svg>
+                {Array.from({ length: 8 }).map((_, i) => {
+                  const angle = (i / 8) * Math.PI * 2
+                  const x = Math.cos(angle) * 130
+                  const y = Math.sin(angle) * 80
+                  const Icon = scattered[i].icon
+                  return (
+                    <div
+                      key={i}
+                      className="absolute h-8 w-8 rounded-md border hairline bg-black grid place-items-center text-white/70"
+                      style={{ transform: `translate(${x}px, ${y}px)` }}
+                    >
+                      <Icon className="h-3.5 w-3.5" />
+                    </div>
+                  )
+                })}
+                <div className="relative z-10 h-16 w-16 rounded-xl bg-white text-black grid place-items-center shadow-2xl">
+                  <div className="text-[10px] tracking-[0.18em] font-semibold">WAIOS</div>
                 </div>
-                <div>
-                  <div className="text-white text-lg font-medium">{LOOP_PHASES[active].label}</div>
-                  <div className="text-waios-muted mt-1 max-w-3xl">{LOOP_PHASES[active].blurb}</div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+              </div>
+
+              <div className="mt-4 flex items-center gap-2 text-[12px] text-white/70">
+                <Check className="h-3.5 w-3.5 text-emerald-400" /> Context assembled once. Executed with control. Recorded forever.
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ============================== LOOP ============================== */
+function LoopRing({ active }) {
+  // Circular arrangement of 6 nodes with animated stroke
+  const R = 130
+  return (
+    <div className="relative mx-auto h-[360px] w-[360px] md:h-[420px] md:w-[420px]">
+      <svg viewBox="0 0 400 400" className="absolute inset-0 w-full h-full">
+        <circle cx="200" cy="200" r={R} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+        <circle cx="200" cy="200" r={R + 22} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" strokeDasharray="2 5" />
+        {/* progress arc */}
+        <motion.circle
+          cx="200" cy="200" r={R}
+          fill="none"
+          stroke="#FF6B1A"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeDasharray={2 * Math.PI * R}
+          strokeDashoffset={2 * Math.PI * R * (1 - (active + 1) / 6)}
+          transform="rotate(-90 200 200)"
+          transition={{ duration: 0.6, ease: EASE }}
+        />
+      </svg>
+      {LOOP.map((p, i) => {
+        const angle = (i / LOOP.length) * Math.PI * 2 - Math.PI / 2
+        const x = Math.cos(angle) * R
+        const y = Math.sin(angle) * R
+        const isActive = i === active
+        const Icon = p.icon
+        return (
+          <div
+            key={p.key}
+            className="absolute left-1/2 top-1/2"
+            style={{ transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))` }}
+          >
+            <motion.div
+              animate={{ scale: isActive ? 1.06 : 1 }}
+              transition={{ duration: 0.4, ease: EASE }}
+              className="flex flex-col items-center gap-2"
+            >
+              <div className={`h-12 w-12 rounded-full grid place-items-center border transition-colors duration-500 ${
+                isActive ? 'bg-white text-black border-white' : 'bg-black text-white/70 hairline'
+              }`}>
+                <Icon className="h-5 w-5" />
+              </div>
+              <div className={`text-[11px] tracking-widest uppercase transition-colors ${isActive ? 'text-white' : 'text-white/50'}`}>
+                {p.label}
+              </div>
+            </motion.div>
+          </div>
+        )
+      })}
+      {/* center */}
+      <div className="absolute inset-0 grid place-items-center pointer-events-none">
+        <div className="text-center">
+          <div className="text-[10px] tracking-[0.24em] uppercase text-dimmer">Phase</div>
+          <div className="mt-1 text-[36px] font-mono text-white">0{active + 1}</div>
+          <div className="text-[11px] tracking-widest uppercase text-white/70 mt-1">{LOOP[active].label}</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function Loop() {
+  const [active, setActive] = useState(0)
+  useEffect(() => {
+    const t = setInterval(() => setActive((a) => (a + 1) % LOOP.length), 2600)
+    return () => clearInterval(t)
+  }, [])
+  return (
+    <section id="loop" className="relative py-24 md:py-32 hairline-b noise">
+      <div className="max-w-6xl mx-auto px-6">
+        <Reveal>
+          <div className="text-[12px] tracking-[0.24em] uppercase text-dimmer">The Loop</div>
+          <h2 className="mt-5 text-[34px] md:text-[56px] leading-[1.02] font-semibold tracking-[-0.025em] text-white text-balance max-w-3xl">
+            One event. <span className="text-dim">One accountable chain of reasoning.</span>
+          </h2>
+          <p className="mt-5 text-[17px] md:text-[19px] leading-relaxed text-dim max-w-2xl">
+            Every operation travels through the same six phases, the same ones an experienced operator would follow,
+            executed with AI reasoning and enterprise‑grade control.
+          </p>
+        </Reveal>
+
+        <div className="mt-14 grid lg:grid-cols-12 gap-10 items-center">
+          <div className="lg:col-span-6">
+            <Reveal>
+              <LoopRing active={active} />
+            </Reveal>
+          </div>
+          <div className="lg:col-span-6">
+            <Reveal delay={0.1}>
+              <div className="space-y-2">
+                {LOOP.map((p, i) => {
+                  const isActive = i === active
+                  const Icon = p.icon
+                  return (
+                    <button
+                      key={p.key}
+                      onClick={() => setActive(i)}
+                      className={`w-full text-left rounded-xl border transition-all duration-500 p-4 flex items-start gap-4 ${
+                        isActive ? 'border-white/25 bg-white/[0.03]' : 'hairline hover:border-white/15'
+                      }`}
+                    >
+                      <div className={`h-9 w-9 shrink-0 rounded-lg grid place-items-center border transition-colors ${
+                        isActive ? 'bg-white text-black border-white' : 'bg-black text-white/70 hairline'
+                      }`}>
+                        <Icon className="h-4 w-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-baseline gap-3">
+                          <span className="text-[15px] font-medium text-white">{p.label}</span>
+                          <span className="text-[11px] font-mono text-dimmer">0{i + 1}</span>
+                        </div>
+                        <div className="text-[13.5px] text-dim mt-0.5">{p.caption}</div>
+                      </div>
+                      <ChevronRight className={`ml-auto h-4 w-4 mt-1 transition-colors ${isActive ? 'text-white' : 'text-white/30'}`} />
+                    </button>
+                  )
+                })}
+              </div>
+            </Reveal>
           </div>
         </div>
       </div>
@@ -288,167 +610,216 @@ function LoopSection() {
   )
 }
 
-/* ---------- LIVE OPERATION TERMINAL ---------- */
+/* ============================== LIVE OPERATION ============================== */
 const SCENARIO = [
-  { phase: 'DISCOVER',   ts: '09:14:22', level: 'info',  text: 'Signal ingested · payments-api-prod · error-rate 4.9% (5m)  ↑ SLO breach imminent' },
-  { phase: 'DISCOVER',   ts: '09:14:22', level: 'info',  text: 'Correlated 12 telemetry sources · 3 downstream deps · CMDB CI: svc-pay-01' },
-  { phase: 'UNDERSTAND', ts: '09:14:24', level: 'info',  text: 'WAI Advisor · assembling operational context …' },
-  { phase: 'UNDERSTAND', ts: '09:14:26', level: 'ok',    text: 'Root cause · connection pool exhaustion after deploy v4.12.3 (14m ago)' },
-  { phase: 'UNDERSTAND', ts: '09:14:26', level: 'info',  text: 'KEDB match · KE-2231 · previously resolved by pool resize + canary rollback' },
-  { phase: 'DECIDE',     ts: '09:14:27', level: 'info',  text: 'Plan proposed · (a) rollback v4.12.3 on 20% canary  (b) raise pool 64 → 128' },
-  { phase: 'DECIDE',     ts: '09:14:27', level: 'info',  text: 'Risk score · 0.21 (low)  · Blast radius · 1 service · Reversible · yes' },
-  { phase: 'APPROVE',    ts: '09:14:28', level: 'warn',  text: 'Policy gate · production write requires CAB approval · notifying on-call SRE' },
-  { phase: 'APPROVE',    ts: '09:14:41', level: 'ok',    text: 'CAB · 1-click approval received · signer: s.mehta@corp · MFA verified' },
-  { phase: 'ACT',        ts: '09:14:42', level: 'info',  text: 'Executing via WAIOS Master · no static credentials · scoped short-lived token' },
-  { phase: 'ACT',        ts: '09:14:47', level: 'ok',    text: 'Canary rollback complete · pool resized · health checks passing (8/8)' },
-  { phase: 'ACT',        ts: '09:14:52', level: 'ok',    text: 'Error-rate 0.4% · latency p95 · 214ms · SLO restored' },
-  { phase: 'LEARN',      ts: '09:14:53', level: 'ok',    text: 'Recorded to Forensic BlackBox · run-id 8f2c…a91 · signed & immutable' },
-  { phase: 'LEARN',      ts: '09:14:53', level: 'info',  text: 'KEDB updated · playbook confidence 0.94 · next-time · auto-approve within policy' },
+  { phase: 'DISCOVER',   ts: '09:14:22', text: 'Signal ingested · payments-api-prod · error-rate 4.9% ↑ SLO breach imminent' },
+  { phase: 'DISCOVER',   ts: '09:14:22', text: 'Correlated 12 telemetry sources · 3 downstream deps · CMDB CI: svc-pay-01' },
+  { phase: 'UNDERSTAND', ts: '09:14:24', text: 'WAI Advisor · assembling operational context …' },
+  { phase: 'UNDERSTAND', ts: '09:14:26', ok: true, text: 'Root cause · connection pool exhaustion after deploy v4.12.3 (14m ago)' },
+  { phase: 'UNDERSTAND', ts: '09:14:26', text: 'KEDB match · KE-2231 · previously resolved by pool resize + canary rollback' },
+  { phase: 'DECIDE',     ts: '09:14:27', text: 'Plan proposed · rollback v4.12.3 on 20% canary  +  pool 64 → 128' },
+  { phase: 'DECIDE',     ts: '09:14:27', text: 'Risk score · 0.21 (low)  · Blast radius · 1 service  · Reversible · yes' },
+  { phase: 'APPROVE',    ts: '09:14:28', text: 'Policy gate · production write requires CAB approval · notifying on-call SRE' },
+  { phase: 'APPROVE',    ts: '09:14:41', ok: true, text: 'CAB · 1-click approval received · signer: s.mehta@corp · MFA verified' },
+  { phase: 'ACT',        ts: '09:14:42', text: 'Executing via WAIOS Master · scoped short-lived token · no static credentials' },
+  { phase: 'ACT',        ts: '09:14:47', ok: true, text: 'Canary rollback complete · pool resized · health checks passing (8/8)' },
+  { phase: 'ACT',        ts: '09:14:52', ok: true, text: 'Error-rate 0.4% · latency p95 214ms · SLO restored' },
+  { phase: 'LEARN',      ts: '09:14:53', ok: true, text: 'Recorded to Forensic BlackBox · run-id 8f2c…a91 · signed & immutable' },
+  { phase: 'LEARN',      ts: '09:14:53', text: 'KEDB updated · next time · auto-approve within policy' },
 ]
 
-const LEVEL_COLORS = {
-  info: 'text-waios-muted',
-  ok:   'text-emerald-400',
-  warn: 'text-amber-400',
-  err:  'text-rose-400',
-}
-const PHASE_COLORS = {
-  DISCOVER:   'text-cyan-300 bg-cyan-500/10 border-cyan-400/20',
-  UNDERSTAND: 'text-violet-300 bg-violet-500/10 border-violet-400/20',
-  DECIDE:     'text-fuchsia-300 bg-fuchsia-500/10 border-fuchsia-400/20',
-  APPROVE:    'text-amber-300 bg-amber-500/10 border-amber-400/20',
-  ACT:        'text-orange-300 bg-orange-500/10 border-orange-400/20',
-  LEARN:      'text-emerald-300 bg-emerald-500/10 border-emerald-400/20',
-}
-
-function LiveOperation() {
+function Live() {
   const [visible, setVisible] = useState(1)
   const [running, setRunning] = useState(true)
-  const scrollRef = useRef(null)
+  const bodyRef = useRef(null)
 
   useEffect(() => {
-    if (!running) return
-    if (visible >= SCENARIO.length) return
-    const t = setTimeout(() => setVisible((v) => v + 1), 700 + Math.random() * 600)
+    if (!running || visible >= SCENARIO.length) return
+    const t = setTimeout(() => setVisible((v) => v + 1), 780 + Math.random() * 520)
     return () => clearTimeout(t)
   }, [visible, running])
 
   useEffect(() => {
-    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+    if (bodyRef.current) bodyRef.current.scrollTop = bodyRef.current.scrollHeight
   }, [visible])
 
-  const currentPhase = useMemo(() => {
-    const idx = Math.min(visible - 1, SCENARIO.length - 1)
-    return SCENARIO[Math.max(0, idx)].phase
-  }, [visible])
+  const currentPhase = SCENARIO[Math.max(0, Math.min(visible - 1, SCENARIO.length - 1))].phase
+  const phaseIndex = ['DISCOVER','UNDERSTAND','DECIDE','APPROVE','ACT','LEARN'].indexOf(currentPhase)
 
-  const progress = useMemo(() => {
-    const map = { DISCOVER: 1, UNDERSTAND: 2, DECIDE: 3, APPROVE: 4, ACT: 5, LEARN: 6 }
-    return map[currentPhase] || 1
-  }, [currentPhase])
+  const errorRate = useMemo(() => {
+    if (phaseIndex <= 1) return 4.9
+    if (phaseIndex === 2) return 4.1
+    if (phaseIndex === 3) return 3.7
+    if (phaseIndex === 4) return 1.2
+    return 0.4
+  }, [phaseIndex])
 
+  const passing = Math.min(8, Math.max(0, phaseIndex + 2))
+  const done = visible >= SCENARIO.length
   const reset = () => { setVisible(1); setRunning(true) }
 
   return (
-    <section id="live" className="relative py-24 md:py-32">
-      <div className="absolute inset-0 waios-grid-fine opacity-30 pointer-events-none" />
-      <div className="container relative">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-          <div className="max-w-2xl">
-            <div className="text-[11px] uppercase tracking-[0.22em] text-waios-orange">Live operation</div>
-            <h2 className="mt-3 text-3xl md:text-5xl font-semibold tracking-tight text-white text-balance">
-              Watch WAIOS handle a real operational event.
-            </h2>
-            <p className="mt-4 text-waios-muted text-lg text-balance">
-              A production incident on <span className="text-waios-text font-mono">payments-api-prod</span> — from first signal to signed audit trail — in under a minute.
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <button onClick={reset} className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-md border hairline text-waios-text hover:bg-white/5">
-              <Play className="h-3.5 w-3.5" /> Replay
-            </button>
-            <button onClick={() => setRunning((r) => !r)} className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-md border hairline text-waios-text hover:bg-white/5">
-              {running ? 'Pause' : 'Resume'}
-            </button>
-          </div>
-        </div>
+    <section id="live" className="relative py-24 md:py-32 hairline-b">
+      <div className="max-w-6xl mx-auto px-6">
+        <Reveal>
+          <div className="text-[12px] tracking-[0.24em] uppercase text-dimmer">In Action</div>
+          <h2 className="mt-5 text-[34px] md:text-[56px] leading-[1.02] font-semibold tracking-[-0.025em] text-white text-balance max-w-3xl">
+            A real incident. <span className="text-dim">Handled end to end.</span>
+          </h2>
+          <p className="mt-5 text-[17px] md:text-[19px] leading-relaxed text-dim max-w-2xl">
+            A production incident on <span className="font-mono text-white/90">payments-api-prod</span>,
+            from first signal to signed audit trail, in under a minute.
+          </p>
+        </Reveal>
 
-        {/* Phase progress bar */}
-        <div className="mt-8 grid grid-cols-6 gap-2">
-          {['DISCOVER','UNDERSTAND','DECIDE','APPROVE','ACT','LEARN'].map((p, i) => {
-            const state = progress > i + 1 ? 'done' : progress === i + 1 ? 'active' : 'idle'
-            return (
-              <div key={p} className="flex flex-col gap-1.5">
-                <div className={`h-1.5 rounded-full transition-all duration-500 ${
-                  state === 'done' ? 'bg-emerald-500/70' : state === 'active' ? 'bg-waios-orange' : 'bg-white/8'
-                }`} />
-                <div className={`text-[10px] tracking-widest uppercase ${state === 'idle' ? 'text-waios-muted/60' : 'text-waios-text/90'}`}>{p}</div>
+        <div className="mt-12">
+          {/* Phase bar */}
+          <div className="grid grid-cols-6 gap-3 mb-6">
+            {['DISCOVER','UNDERSTAND','DECIDE','APPROVE','ACT','LEARN'].map((p, i) => {
+              const state = phaseIndex > i ? 'done' : phaseIndex === i ? 'active' : 'idle'
+              return (
+                <div key={p} className="flex flex-col gap-2">
+                  <div className={`h-[3px] rounded-full transition-all duration-500 ${
+                    state === 'done' ? 'bg-white/85' :
+                    state === 'active' ? 'bg-[#FF6B1A]' :
+                    'bg-white/10'
+                  }`} />
+                  <div className={`text-[10.5px] tracking-[0.18em] uppercase transition-colors ${
+                    state === 'idle' ? 'text-white/25' : 'text-white/75'
+                  }`}>{p}</div>
+                </div>
+              )
+            })}
+          </div>
+
+          <div className="grid lg:grid-cols-5 gap-4">
+            {/* Terminal */}
+            <div className="lg:col-span-3 rounded-2xl overflow-hidden border hairline bg-black">
+              <div className="flex items-center justify-between px-5 h-11 hairline-b">
+                <div className="font-mono text-[12px] text-white/50 flex items-center gap-2">
+                  <TerminalSquare className="h-3.5 w-3.5" />
+                  waios://ops/incident/INC-88214 · region:eu-west-1
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="inline-flex items-center gap-1.5 text-[11px] text-white/50"><LiveDot /> live</span>
+                  <button onClick={() => setRunning((r) => !r)} className="text-white/55 hover:text-white transition">
+                    {running ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+                  </button>
+                  <button onClick={reset} className="text-white/55 hover:text-white transition">
+                    <RotateCcw className="h-3.5 w-3.5" />
+                  </button>
+                </div>
               </div>
-            )
-          })}
-        </div>
+              <div ref={bodyRef} className="term-scroll h-[420px] overflow-y-auto px-6 py-6 font-mono text-[13px] leading-[1.9]">
+                {SCENARIO.slice(0, visible).map((line, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 3 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="grid grid-cols-[70px_110px_1fr] gap-4 items-baseline"
+                  >
+                    <span className="text-white/30">{line.ts}</span>
+                    <span className="inline-flex items-center justify-center h-[20px] rounded-full border hairline text-[10px] tracking-[0.16em] text-white/70 px-2">
+                      {line.phase}
+                    </span>
+                    <span className={line.ok ? 'text-white' : 'text-white/60'}>
+                      {line.ok && <span className="text-[#FF6B1A] mr-1.5">✔</span>}
+                      {line.text}
+                    </span>
+                  </motion.div>
+                ))}
+                {visible < SCENARIO.length && running && <div className="mt-2 text-white/40"><span className="caret" /></div>}
+                {done && (
+                  <div className="mt-6 pt-5 hairline-t text-white/85">
+                    <span className="text-[#FF6B1A] mr-2">•</span>
+                    Incident resolved in 00:00:31. Signed audit trail written. KEDB updated. No human paged out of hours.
+                  </div>
+                )}
+              </div>
+            </div>
 
-        <div className="mt-6 rounded-2xl border hairline glass-strong overflow-hidden">
-          {/* Terminal chrome */}
-          <div className="flex items-center gap-3 px-4 h-10 border-b hairline bg-black/40">
-            <div className="flex items-center gap-1.5">
-              <div className="h-2.5 w-2.5 rounded-full bg-red-500/70" />
-              <div className="h-2.5 w-2.5 rounded-full bg-yellow-500/70" />
-              <div className="h-2.5 w-2.5 rounded-full bg-emerald-500/70" />
-            </div>
-            <div className="text-xs text-waios-muted font-mono flex items-center gap-2">
-              <Terminal className="h-3.5 w-3.5" /> waios://ops/incident/INC-88214 · region:eu-west-1
-            </div>
-            <div className="ml-auto flex items-center gap-3 text-[11px] text-waios-muted">
-              <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse-soft" /> live</span>
-              <span className="font-mono">run-id 8f2c…a91</span>
+            {/* Live tiles */}
+            <div className="lg:col-span-2 grid grid-cols-2 gap-4">
+              {/* Error rate tile */}
+              <div className="col-span-2 rounded-2xl border hairline bg-black/60 p-5">
+                <div className="flex items-center justify-between">
+                  <div className="text-[10.5px] tracking-[0.2em] uppercase text-dimmer">Error rate</div>
+                  <span className="text-[10.5px] font-mono text-dimmer">SLO 2.0%</span>
+                </div>
+                <div className="mt-2 flex items-baseline gap-2">
+                  <div className={`text-[36px] font-mono ${errorRate > 2 ? 'text-[#FF6B1A]' : 'text-emerald-400'}`}>{errorRate.toFixed(1)}%</div>
+                  <div className="text-[12px] text-white/50">p95 214ms</div>
+                </div>
+                <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
+                  <motion.div
+                    className="h-full bg-white/70"
+                    initial={{ width: '95%' }}
+                    animate={{ width: `${Math.max(5, errorRate * 15)}%` }}
+                    transition={{ duration: 0.6 }}
+                  />
+                </div>
+              </div>
+              {/* Approval tile */}
+              <div className="rounded-2xl border hairline bg-black/60 p-5">
+                <div className="text-[10.5px] tracking-[0.2em] uppercase text-dimmer">Approval</div>
+                <div className="mt-3 flex items-center gap-2">
+                  <div className="flex -space-x-2">
+                    <div className="h-7 w-7 rounded-full bg-white/10 border hairline grid place-items-center text-[10.5px] text-white/85">SM</div>
+                    <div className="h-7 w-7 rounded-full bg-white/10 border hairline grid place-items-center text-[10.5px] text-white/85">JK</div>
+                  </div>
+                  <div className="text-[12px] text-white/70">CAB, 1‑click</div>
+                </div>
+                <div className={`mt-3 inline-flex items-center gap-1.5 text-[11.5px] ${phaseIndex >= 3 ? 'text-emerald-400' : 'text-amber-400'}`}>
+                  {phaseIndex >= 3 ? <Check className="h-3.5 w-3.5" /> : <Circle className="h-3 w-3" />}
+                  {phaseIndex >= 3 ? 'signed by s.mehta@corp' : 'awaiting on‑call SRE'}
+                </div>
+              </div>
+              {/* Health tile */}
+              <div className="rounded-2xl border hairline bg-black/60 p-5">
+                <div className="text-[10.5px] tracking-[0.2em] uppercase text-dimmer">Health</div>
+                <div className="mt-3 grid grid-cols-4 gap-1.5">
+                  {Array.from({ length: 8 }).map((_, i) => (
+                    <div key={i} className={`h-5 rounded-sm transition-colors duration-500 ${i < passing ? 'bg-emerald-400/85' : 'bg-white/10'}`} />
+                  ))}
+                </div>
+                <div className="mt-2 text-[11.5px] text-white/60 font-mono">{passing}/8 passing</div>
+              </div>
+              {/* Audit tile */}
+              <div className="col-span-2 rounded-2xl border hairline bg-black/60 p-5">
+                <div className="flex items-center justify-between">
+                  <div className="text-[10.5px] tracking-[0.2em] uppercase text-dimmer">Forensic BlackBox</div>
+                  <span className="text-[10.5px] font-mono text-white/50">signed</span>
+                </div>
+                <div className="mt-3 grid grid-cols-3 gap-3 text-[12px]">
+                  <div>
+                    <div className="text-white/40 uppercase tracking-widest text-[9.5px]">run‑id</div>
+                    <div className="font-mono text-white mt-1">8f2c…a91</div>
+                  </div>
+                  <div>
+                    <div className="text-white/40 uppercase tracking-widest text-[9.5px]">chain</div>
+                    <div className="font-mono text-white mt-1">14 steps</div>
+                  </div>
+                  <div>
+                    <div className="text-white/40 uppercase tracking-widest text-[9.5px]">status</div>
+                    <div className="font-mono text-emerald-400 mt-1">immutable</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Log body */}
-          <div ref={scrollRef} className="term-scroll max-h-[440px] overflow-y-auto p-5 font-mono text-[13px] leading-relaxed bg-[#0A0B0D]">
-            {SCENARIO.slice(0, visible).map((line, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 4 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.25 }}
-                className="grid grid-cols-[76px_110px_1fr] gap-3 py-1"
-              >
-                <span className="text-waios-muted/70">{line.ts}</span>
-                <span className={`inline-flex items-center justify-center px-1.5 rounded border text-[10px] tracking-widest ${PHASE_COLORS[line.phase]}`}>
-                  {line.phase}
-                </span>
-                <span className={LEVEL_COLORS[line.level]}>
-                  {line.level === 'ok' && <CheckCircle2 className="inline h-3.5 w-3.5 mr-1 -mt-0.5 text-emerald-400" />}
-                  {line.text}
-                </span>
-              </motion.div>
-            ))}
-            {visible < SCENARIO.length && running && (
-              <div className="mt-2 text-waios-muted">
-                <span className="caret" />
-              </div>
-            )}
-            {visible >= SCENARIO.length && (
-              <div className="mt-4 rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-4 text-emerald-300">
-                <div className="flex items-center gap-2 text-sm font-medium"><CheckCircle2 className="h-4 w-4" /> Incident resolved · 00:00:31</div>
-                <div className="mt-1 text-emerald-200/80 text-xs">Signed audit trail written to Forensic BlackBox. KEDB updated. No human paged out of hours.</div>
-              </div>
-            )}
-          </div>
-
-          {/* Footer strip */}
-          <div className="grid grid-cols-2 md:grid-cols-4 border-t hairline">
+          {/* stats footer */}
+          <div className="mt-6 grid grid-cols-2 md:grid-cols-4 rounded-2xl border hairline overflow-hidden">
             {[
               { k: 'Time to resolution', v: '00:00:31' },
-              { k: 'Human actions',     v: '1 · CAB approval' },
-              { k: 'Services touched',  v: 'svc-pay-01' },
-              { k: 'Auditable',         v: 'Signed · immutable' },
-            ].map((s) => (
-              <div key={s.k} className="px-5 py-4 border-r hairline last:border-r-0">
-                <div className="text-[10px] uppercase tracking-widest text-waios-muted">{s.k}</div>
-                <div className="mt-1 text-sm text-white font-mono">{s.v}</div>
+              { k: 'Human actions',      v: '1, CAB approval' },
+              { k: 'Services touched',   v: 'svc-pay-01' },
+              { k: 'Audit trail',        v: 'Signed, immutable' },
+            ].map((s, i, arr) => (
+              <div key={s.k} className={`px-5 py-5 ${i < arr.length - 1 ? 'md:border-r hairline' : ''}`}>
+                <div className="text-[10px] tracking-[0.2em] uppercase text-white/35">{s.k}</div>
+                <div className="mt-1.5 text-[15px] text-white font-mono">{s.v}</div>
               </div>
             ))}
           </div>
@@ -458,66 +829,367 @@ function LiveOperation() {
   )
 }
 
-/* ---------- FINAL CTA ---------- */
-function FinalCTA() {
+/* ============================== DIFFERENTIATORS ============================== */
+function MiniNodes() {
   return (
-    <section id="contact" className="relative py-24 md:py-32">
-      <div className="container">
-        <div className="relative overflow-hidden rounded-3xl border hairline glass-strong p-10 md:p-16">
-          <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-waios-orange/20 blur-3xl" />
-          <div className="absolute inset-0 waios-grid opacity-40 pointer-events-none" />
-          <div className="relative grid md:grid-cols-12 gap-8 items-center">
-            <div className="md:col-span-8">
-              <div className="text-[11px] uppercase tracking-[0.22em] text-waios-orange">Ready when you are</div>
-              <h3 className="mt-3 text-3xl md:text-5xl font-semibold text-white tracking-tight text-balance">
-                See WAIOS run one of your own operational events — end to end.
-              </h3>
-              <p className="mt-4 text-waios-muted text-lg max-w-2xl">
-                A guided 30-minute session with the WAIOS team. Bring a real incident, alert, or change request.
-                We will show you the full loop — discover, understand, decide, approve, act, learn — with your context.
-              </p>
-            </div>
-            <div className="md:col-span-4 flex md:flex-col gap-3 md:items-stretch">
-              <a href="#" className="inline-flex items-center justify-center gap-2 rounded-md bg-waios-orange text-black px-5 py-3 font-medium hover:brightness-110 transition">
-                Book a live demo <ArrowRight className="h-4 w-4" />
-              </a>
-              <a href="#architecture" className="inline-flex items-center justify-center gap-2 rounded-md border hairline text-white px-5 py-3 hover:bg-white/5 transition">
-                Talk to the WAIOS Team
-              </a>
-            </div>
-          </div>
+    <svg viewBox="0 0 200 100" className="w-full h-24">
+      {[[20,50],[70,20],[70,80],[130,50],[180,20],[180,80]].map(([x,y], i) => (
+        <g key={i}>
+          {i > 0 && (
+            <motion.line
+              x1={[20,70,70,130,180,180][i-1] ?? 20} y1={[50,20,80,50,20,80][i-1] ?? 50}
+              x2={x} y2={y}
+              stroke="rgba(255,255,255,0.25)" strokeWidth="1"
+              initial={{ pathLength: 0 }} whileInView={{ pathLength: 1 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: i * 0.05 }}
+            />
+          )}
+        </g>
+      ))}
+      {[[20,50],[70,20],[70,80],[130,50],[180,20],[180,80]].map(([x,y], i) => (
+        <motion.circle key={`c${i}`} cx={x} cy={y} r="4" fill="#fff"
+          initial={{ scale: 0 }} whileInView={{ scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.15 + i * 0.06 }} />
+      ))}
+    </svg>
+  )
+}
+
+function MiniGate() {
+  return (
+    <div className="flex items-center gap-2 h-24">
+      <div className="flex flex-col gap-1">
+        {['identity','policy','risk'].map((t, i) => (
+          <motion.div key={t} initial={{ opacity: 0, x: -6 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.1 }}
+            className="px-2 py-1 rounded-md border hairline text-[10.5px] text-white/75 bg-black/40">{t}</motion.div>
+        ))}
+      </div>
+      <div className="flex-1 border-t border-dashed border-white/15" />
+      <div className="h-14 w-14 rounded-xl border hairline bg-black grid place-items-center">
+        <Lock className="h-5 w-5 text-white/85" />
+      </div>
+      <div className="flex-1 border-t border-dashed border-white/15" />
+      <div className="h-10 w-10 rounded-lg bg-white text-black grid place-items-center text-[10px] font-semibold">ACT</div>
+    </div>
+  )
+}
+
+function MiniExecution() {
+  return (
+    <div className="h-24 relative overflow-hidden">
+      <div className="absolute inset-0 flex items-center">
+        <div className="h-8 w-8 rounded-full border hairline bg-black grid place-items-center text-white/75"><Zap className="h-4 w-4" /></div>
+        <div className="flex-1 h-px bg-white/10 relative mx-2">
+          <motion.div
+            className="absolute top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-[#FF6B1A]"
+            animate={{ x: [0, 240, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </div>
+        <div className="h-8 w-8 rounded-full border hairline bg-black grid place-items-center text-white/75"><Server className="h-4 w-4" /></div>
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 flex justify-between text-[10px] font-mono text-white/40">
+        <span>WAIOS Master</span><span>token expires 60s</span>
+      </div>
+    </div>
+  )
+}
+
+function MiniAudit() {
+  return (
+    <div className="h-24 relative">
+      <div className="rounded-lg border hairline bg-black/50 p-3 h-full">
+        <div className="flex items-center justify-between text-[10px] font-mono text-white/60">
+          <span>run‑id 8f2c…a91</span>
+          <span className="inline-flex items-center gap-1 text-emerald-400"><Check className="h-3 w-3" /> signed</span>
+        </div>
+        <div className="mt-2 space-y-1">
+          {['discover','decide','approve','act'].map((s, i) => (
+            <motion.div key={s} initial={{ opacity: 0, width: 0 }} whileInView={{ opacity: 1, width: '100%' }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="h-1.5 shimmer rounded-full" />
+          ))}
         </div>
       </div>
+    </div>
+  )
+}
 
-      <footer id="architecture" className="mt-16 border-t hairline">
-        <div className="container py-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="flex items-center gap-3">
-            <div className="h-7 w-7 rounded-md bg-gradient-to-br from-waios-orange to-waios-amber grid place-items-center">
-              <div className="h-3 w-3 rounded-sm bg-waios-ink" />
-            </div>
-            <div>
-              <div className="text-sm text-white">WAIOS</div>
-              <div className="text-xs text-waios-muted">Autonomous Enterprise Operating System</div>
-            </div>
-          </div>
-          <div className="text-xs text-waios-muted">
-            © {new Date().getFullYear()} WAIOS. Governed by design. Built on Enterprise Linux.
-          </div>
+function Differentiators() {
+  const cards = [
+    { title: 'Context',        desc: 'WAIOS reasons using a living operational graph of your CMDB, telemetry, and knowledge, not isolated prompts.', visual: <MiniNodes /> },
+    { title: 'Control',        desc: 'Every action passes through identity, policy, risk scoring, and CAB approval. Governance is a first‑class runtime.', visual: <MiniGate /> },
+    { title: 'Execution',      desc: 'WAIOS moves from recommendation to controlled action, without static credentials or hand‑off gaps.', visual: <MiniExecution /> },
+    { title: 'Accountability', desc: 'Every decision, approval, and change writes a signed, immutable record to the Forensic BlackBox.', visual: <MiniAudit /> },
+  ]
+  return (
+    <section id="differentiators" className="relative py-24 md:py-32 hairline-b">
+      <div className="max-w-6xl mx-auto px-6">
+        <Reveal>
+          <div className="text-[12px] tracking-[0.24em] uppercase text-dimmer">Why WAIOS</div>
+          <h2 className="mt-5 text-[34px] md:text-[56px] leading-[1.02] font-semibold tracking-[-0.025em] text-white text-balance max-w-3xl">
+            Reasoning is not enough. <span className="text-dim">Enterprises need reasoning that can act, and answer for it.</span>
+          </h2>
+        </Reveal>
+
+        <div className="mt-14 grid md:grid-cols-2 gap-4">
+          {cards.map((c, i) => (
+            <Reveal key={c.title} delay={i * 0.06}>
+              <div className="rounded-2xl border hairline p-6 md:p-8 bg-[#0A0A0C] card-hover h-full flex flex-col">
+                <div className="flex items-center gap-3">
+                  <div className="h-8 w-8 rounded-lg bg-white text-black grid place-items-center text-[12px] font-semibold">0{i + 1}</div>
+                  <div className="text-[20px] font-semibold text-white tracking-tight">{c.title}</div>
+                </div>
+                <div className="mt-4">{c.visual}</div>
+                <p className="mt-6 text-[15px] leading-relaxed text-dim">{c.desc}</p>
+              </div>
+            </Reveal>
+          ))}
         </div>
-      </footer>
+      </div>
     </section>
   )
 }
 
-/* ---------- APP ---------- */
+/* ============================== SYSTEM ============================== */
+function System() {
+  const groups = [
+    {
+      title: 'Intelligence',
+      desc: 'Reasoning, advisory, and specialized AI.',
+      items: [
+        { icon: Brain,     name: 'WAI Advisor',      note: 'Operational reasoning' },
+        { icon: Database,  name: 'KEDB',             note: 'Known error database' },
+        { icon: Sparkles,  name: 'Specialized AI',   note: 'Domain agents' },
+      ],
+    },
+    {
+      title: 'Governance',
+      desc: 'Risk, identity, policy, approval, audit.',
+      items: [
+        { icon: Gavel,       name: 'CAB Workflow',      note: '1‑click approvals' },
+        { icon: Shield,      name: 'Risk Engine',       note: 'Score every action' },
+        { icon: FileCheck2,  name: 'Forensic BlackBox', note: 'Signed, immutable' },
+      ],
+    },
+    {
+      title: 'Execution',
+      desc: 'Controlled action across your estate.',
+      items: [
+        { icon: Cpu,       name: 'WAIOS Master',              note: 'Central orchestrator' },
+        { icon: Boxes,     name: 'Automated Software Factory',note: 'Build, verify, deploy, clean' },
+        { icon: KeyRound,  name: 'Credential‑less runtime',   note: 'Short‑lived tokens' },
+      ],
+    },
+  ]
+  return (
+    <section id="system" className="relative py-24 md:py-32 hairline-b noise">
+      <div className="max-w-6xl mx-auto px-6">
+        <Reveal>
+          <div className="text-[12px] tracking-[0.24em] uppercase text-dimmer">The System</div>
+          <h2 className="mt-5 text-[34px] md:text-[56px] leading-[1.02] font-semibold tracking-[-0.025em] text-white text-balance max-w-3xl">
+            An operating system, <span className="text-dim">not a catalog of tools.</span>
+          </h2>
+          <p className="mt-5 text-[17px] md:text-[19px] leading-relaxed text-dim max-w-2xl">
+            WAIOS Master orchestrates three coherent layers. Each has a job. Together they close the loop.
+          </p>
+        </Reveal>
+
+        <div className="mt-14 grid lg:grid-cols-3 gap-4">
+          {groups.map((g, gi) => (
+            <Reveal key={g.title} delay={gi * 0.07}>
+              <div className="rounded-2xl border hairline p-6 md:p-7 bg-[#0A0A0C] h-full card-hover">
+                <div className="flex items-baseline justify-between">
+                  <div>
+                    <div className="text-[11px] tracking-[0.2em] uppercase text-dimmer">Layer 0{gi + 1}</div>
+                    <div className="mt-1 text-[22px] font-semibold text-white tracking-tight">{g.title}</div>
+                  </div>
+                  <Layers className="h-4 w-4 text-white/40" />
+                </div>
+                <p className="mt-2 text-[13.5px] text-dim">{g.desc}</p>
+                <div className="mt-6 space-y-2">
+                  {g.items.map((it) => {
+                    const I = it.icon
+                    return (
+                      <div key={it.name} className="flex items-center gap-3 rounded-lg border hairline bg-black/40 px-3 py-2.5">
+                        <div className="h-7 w-7 rounded-md bg-white/5 grid place-items-center text-white/80"><I className="h-3.5 w-3.5" /></div>
+                        <div className="min-w-0">
+                          <div className="text-[13px] text-white truncate">{it.name}</div>
+                          <div className="text-[11.5px] text-white/50 truncate">{it.note}</div>
+                        </div>
+                        <ArrowUpRight className="ml-auto h-3.5 w-3.5 text-white/30" />
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        {/* Software factory strip */}
+        <Reveal delay={0.1}>
+          <div className="mt-8 rounded-2xl border hairline bg-black/40 p-6 md:p-8">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <div className="text-[11px] tracking-widest uppercase text-dimmer">Automated Software Factory</div>
+                <div className="mt-1 text-[18px] text-white font-medium">Build, verify, approve, deploy, clean.</div>
+              </div>
+              <a href="#contact" className="inline-flex items-center gap-1.5 text-[13.5px] text-white/85 hover:text-white transition">
+                Explore agents <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
+            <div className="mt-6 grid grid-cols-2 md:grid-cols-5 gap-2">
+              {[
+                { k: 'Build',    icon: GitBranch },
+                { k: 'Verify',   icon: Shield },
+                { k: 'Approve',  icon: Gavel },
+                { k: 'Deploy',   icon: Cpu },
+                { k: 'Clean',    icon: Zap },
+              ].map((s, i) => {
+                const I = s.icon
+                return (
+                  <div key={s.k} className="relative rounded-lg border hairline bg-black/60 px-4 py-3 flex items-center gap-2">
+                    <div className="h-7 w-7 rounded-md bg-white/5 grid place-items-center text-white/80"><I className="h-3.5 w-3.5" /></div>
+                    <div>
+                      <div className="text-[12.5px] text-white">{s.k}</div>
+                      <div className="text-[10.5px] text-white/45">phase 0{i + 1}</div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  )
+}
+
+/* ============================== METRICS BAND ============================== */
+function Metrics() {
+  const items = [
+    { v: <Counter to={6} />,   k: 'phases in the loop' },
+    { v: <span>0</span>,        k: 'static credentials in flight' },
+    { v: <span>&lt;60s</span>, k: 'signal to signed audit' },
+    { v: <span>100%</span>,    k: 'actions attributable to a signer' },
+  ]
+  return (
+    <section className="relative py-20 md:py-24 hairline-b">
+      <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+        {items.map((it, i) => (
+          <Reveal key={i} delay={i * 0.06}>
+            <div className="rounded-2xl border hairline bg-black/40 p-6 h-full">
+              <div className="text-[44px] md:text-[56px] font-semibold tracking-[-0.03em] text-white">{it.v}</div>
+              <div className="mt-1 text-[13px] text-dim">{it.k}</div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+/* ============================== CTA ============================== */
+function CTA() {
+  return (
+    <section id="contact" className="relative">
+      <div className="max-w-6xl mx-auto px-6 py-28 md:py-40 text-center">
+        <Reveal>
+          <div className="inline-flex items-center gap-2 rounded-full border hairline px-3 py-1 text-[11.5px] text-white/70">
+            <LiveDot /> Ready when you are
+          </div>
+        </Reveal>
+        <Reveal delay={0.05}>
+          <h2 className="mt-6 text-[40px] md:text-[76px] leading-[1] font-semibold tracking-[-0.03em] text-white text-balance">
+            See WAIOS run
+            <br />
+            <span className="text-dim">one of your own events.</span>
+          </h2>
+        </Reveal>
+        <Reveal delay={0.12}>
+          <p className="mt-6 mx-auto max-w-2xl text-[18px] md:text-[20px] leading-relaxed text-dim text-pretty">
+            A 30‑minute session with the WAIOS team. Bring a real incident, alert, or change request,
+            and we will run it through the full loop with your context.
+          </p>
+        </Reveal>
+        <Reveal delay={0.18}>
+          <div className="mt-10 flex items-center justify-center gap-3">
+            <a href="#" className="inline-flex items-center gap-2 rounded-full bg-white text-black px-6 py-3 text-[14px] font-medium hover:bg-white/90 transition">
+              Book a live demo <ArrowRight className="h-4 w-4" />
+            </a>
+            <a href="#" className="inline-flex items-center gap-2 rounded-full border hairline px-6 py-3 text-[14px] font-medium text-white/90 hover:bg-white/5 transition">
+              Talk to the team
+            </a>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  )
+}
+
+/* ============================== FOOTER ============================== */
+function Footer() {
+  const cols = [
+    { title: 'Product',      items: ['The Loop', 'In Action', 'Why WAIOS', 'The System', 'Automated Software Factory'] },
+    { title: 'Architecture', items: ['WAIOS Master', 'WAI Advisor', 'KEDB', 'CAB Workflow', 'Forensic BlackBox'] },
+    { title: 'Company',      items: ['About', 'Security', 'Press', 'Contact', 'Careers'] },
+  ]
+  return (
+    <footer className="hairline-t">
+      <div className="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-4 gap-10">
+        <div>
+          <div className="flex items-center gap-2.5">
+            <div className="h-6 w-6 rounded-md bg-white grid place-items-center">
+              <div className="h-2 w-2 rounded-[2px] bg-black" />
+            </div>
+            <span className="text-[15px] font-medium text-white">WAIOS</span>
+          </div>
+          <p className="mt-4 text-[13px] text-dim leading-relaxed">
+            The Autonomous Enterprise Operating System. Governed by design, built on Enterprise Linux.
+          </p>
+          <div className="mt-5 inline-flex items-center gap-1.5 text-[11px] text-dimmer">
+            <LiveDot /> systems nominal
+          </div>
+        </div>
+        {cols.map((c) => (
+          <div key={c.title}>
+            <div className="text-[11px] tracking-[0.2em] uppercase text-dimmer">{c.title}</div>
+            <ul className="mt-4 space-y-2">
+              {c.items.map((it) => (
+                <li key={it}>
+                  <a href="#" className="text-[13.5px] text-white/75 hover:text-white transition">{it}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <div className="hairline-t">
+        <div className="max-w-6xl mx-auto px-6 py-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-[12px] text-dimmer">
+          <div>© {new Date().getFullYear()} WAIOS. All rights reserved.</div>
+          <div className="flex items-center gap-5">
+            <a href="#" className="hover:text-white transition">Privacy</a>
+            <a href="#" className="hover:text-white transition">Terms</a>
+            <a href="#" className="hover:text-white transition">Security</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  )
+}
+
+/* ============================== APP ============================== */
 function App() {
   return (
-    <div className="min-h-screen text-waios-text">
-      <NavBar />
+    <div className="min-h-screen text-white/90 selection:bg-white/20">
+      <Nav />
       <Hero />
-      <LoopSection />
-      <LiveOperation />
-      <FinalCTA />
+      <Industries />
+      <Problem />
+      <Loop />
+      <Live />
+      <Differentiators />
+      <System />
+      <Metrics />
+      <CTA />
+      <Footer />
     </div>
   )
 }

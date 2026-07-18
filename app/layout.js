@@ -2,7 +2,7 @@ import './globals.css'
 import { Providers } from './providers'
 
 export const metadata = {
-  title: 'WAIOS — The Operating Layer for Autonomous Enterprise Operations',
+  title: 'WAIOS · The Operating Layer for Autonomous Enterprise Operations',
   description:
     'WAIOS connects enterprise systems, AI reasoning, governance, approval, execution and learning into one accountable operational loop.',
 }
