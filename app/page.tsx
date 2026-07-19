@@ -7,6 +7,7 @@ import { Problem } from "@/components/home/Problem"
 import { Loop } from "@/components/home/LoopSection"
 import { Live } from "@/components/home/Live"
 import { SoftwareFactory } from "@/components/home/SoftwareFactory"
+import { CoreBrain } from "@/components/home/CoreBrain"
 import { Control } from "@/components/home/Control"
 import { Oracle } from "@/components/home/Oracle"
 import { ArchitectureHint } from "@/components/home/ArchitectureHint"
@@ -25,6 +26,7 @@ export default function App() {
       <Loop />
       <Live />
       <SoftwareFactory />
+      <CoreBrain />
       <Control />
       <Oracle />
       <ArchitectureHint />
