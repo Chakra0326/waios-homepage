@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion, animate } from 'framer-motion'
+import { motion, animate, AnimatePresence } from 'framer-motion'
 import {
   ChevronRight, } from 'lucide-react'
 import { Reveal, LOOP, EASE } from "./Common"
@@ -51,6 +51,8 @@ export function LoopRing({ active }: { active: number }) {
 
 export function Loop() {
   const [active, setActive] = useState(0)
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
+  
   useEffect(() => {
     const t = setInterval(() => setActive((a) => (a + 1) % LOOP.length), 2800)
     return () => clearInterval(t)
@@ -78,23 +80,42 @@ export function Loop() {
               <div className="space-y-2">
                 {LOOP.map((p, i) => {
                   const isActive = i === active
+                  const isExpanded = i === expandedIndex
                   const Icon = p.icon
                   return (
-                    <button key={p.key} onClick={() => setActive(i)}
-                      className={`w-full text-left rounded-xl border transition-all duration-500 p-4 flex items-start gap-4 ${
+                    <button key={p.key} onClick={() => {
+                        setActive(i)
+                        setExpandedIndex(isExpanded ? null : i)
+                      }}
+                      className={`w-full text-left rounded-xl border transition-all duration-500 p-4 flex items-start gap-4 overflow-hidden ${
                         isActive ? 'border-white/25 bg-white/[0.03]' : 'hairline hover:border-white/15'
                       }`}>
                       <div className={`h-9 w-9 shrink-0 rounded-lg grid place-items-center border transition-colors ${
                         isActive ? 'bg-white text-black border-white' : 'bg-black text-white/70 hairline'
                       }`}><Icon className="h-4 w-4" /></div>
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                         <div className="flex items-baseline gap-3">
                           <span className="text-[15px] font-medium text-white">{p.label}</span>
                           <span className="text-[11px] font-mono text-dimmer">0{i + 1}</span>
                         </div>
                         <div className="text-[13.5px] text-dim mt-0.5">{p.caption}</div>
+                        <AnimatePresence initial={false}>
+                          {isExpanded && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.3, ease: EASE }}
+                              className="overflow-hidden"
+                            >
+                              <p className="pt-3 text-[13px] text-dimmer leading-relaxed">
+                                {p.detail}
+                              </p>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </div>
-                      <ChevronRight className={`ml-auto h-4 w-4 mt-1 transition-colors ${isActive ? 'text-white' : 'text-white/30'}`} />
+                      <ChevronRight className={`ml-auto h-4 w-4 mt-1 shrink-0 transition-all duration-300 ${isExpanded ? 'text-white rotate-90' : 'text-white/30 rotate-0'}`} />
                     </button>
                   )
                 })}

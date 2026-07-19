@@ -10,7 +10,6 @@ import { SoftwareFactory } from "@/components/home/SoftwareFactory"
 import { CoreBrain } from "@/components/home/CoreBrain"
 import { Control } from "@/components/home/Control"
 import { Oracle } from "@/components/home/Oracle"
-import { ArchitectureHint } from "@/components/home/ArchitectureHint"
 import { Pricing } from "@/components/home/Pricing"
 import { CTA } from "@/components/home/CTA"
 import { Footer } from "@/components/home/Footer"
@@ -29,7 +28,6 @@ export default function App() {
       <CoreBrain />
       <Control />
       <Oracle />
-      <ArchitectureHint />
       <Pricing />
       <CTA />
       <Footer />

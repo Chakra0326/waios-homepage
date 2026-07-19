@@ -42,7 +42,7 @@ export function Hero() {
           <div className="mt-20 md:mt-28 flex flex-wrap justify-center items-center gap-x-4 gap-y-2 text-[13px] font-semibold tracking-widest uppercase text-white/40">
             <span>ITIL v5 Aligned</span>
             <span className="text-white/20">&middot;</span>
-            <span>ISO 27001 & 20000-1</span>
+            <span>ISO 27001, 22301 & 20000-1</span>
             <span className="text-white/20">&middot;</span>
             <span>Zero-Footprint</span>
             <span className="text-white/20">&middot;</span>

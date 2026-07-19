@@ -130,7 +130,12 @@ export function Live() {
                 </div>
               </div>
               <div className="rounded-2xl border hairline bg-black/60 p-5">
-                <div className="text-[10.5px] tracking-[0.2em] uppercase text-dimmer">Approval</div>
+                <div className="flex items-center justify-between">
+                  <div className="text-[10.5px] tracking-[0.2em] uppercase text-dimmer">Approval</div>
+                  <div className="inline-flex items-center rounded-full border hairline px-2 py-0.5 text-[9px] font-medium tracking-widest uppercase text-white/50 bg-white/5">
+                    One-click CAB approval
+                  </div>
+                </div>
                 <div className="mt-3 flex items-center gap-2">
                   <div className="flex -space-x-2">
                     <div className="h-7 w-7 rounded-full bg-white/10 border hairline grid place-items-center text-[10.5px] text-white/85">SM</div>

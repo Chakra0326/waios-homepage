@@ -123,6 +123,18 @@ export function Problem() {
             </div>
           </Reveal>
         </div>
+
+        <Reveal delay={0.2}>
+          <div className="mt-16 flex flex-col items-center text-center">
+            <div className="text-[12px] tracking-[0.24em] uppercase text-dimmer">Single Source of Truth</div>
+            <h3 className="mt-4 text-[24px] md:text-[32px] leading-[1.02] font-semibold tracking-[-0.02em] text-white text-balance max-w-2xl">
+              Everything runs on one source of truth.
+            </h3>
+            <p className="mt-4 text-[16px] md:text-[18px] leading-relaxed text-dim max-w-2xl">
+              Every discovery, decision, and action reads from and writes back to a single Modern CMDB. Not eight tools stitched together. One record, one Hub, one truth.
+            </p>
+          </div>
+        </Reveal>
       </div>
     </section>
   )
