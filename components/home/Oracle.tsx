@@ -1,9 +1,47 @@
 'use client'
 
+import { useRef, useEffect } from 'react'
 import { Activity, Lock } from 'lucide-react'
 import { Reveal } from './Common'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 export function Oracle() {
+  const consoleRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    gsap.registerPlugin(ScrollTrigger)
+
+    const el = consoleRef.current
+    if (!el) return
+
+    const boxes = el.querySelectorAll<HTMLElement>('[data-oracle-box]')
+
+    const ctx = gsap.context(() => {
+      if (boxes.length) {
+        gsap.fromTo(
+          boxes,
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            stagger: 0.2,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 80%',
+              once: true,
+            },
+          }
+        )
+      }
+    }, el)
+
+    return () => ctx.revert()
+  }, [])
+
   return (
     <section className="relative py-24 md:py-32 hairline-b">
       <div className="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
@@ -35,20 +73,22 @@ export function Oracle() {
         </Reveal>
         
         <Reveal delay={0.2}>
-          <div className="relative rounded-2xl border hairline p-6 bg-[#0A0A0C] h-[440px] flex flex-col overflow-hidden shadow-2xl">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(52,211,153,0.08)_0%,transparent_50%)]" />
+          <div ref={consoleRef} className="relative rounded-2xl border hairline p-6 bg-[#0A0A0C] h-[440px] flex flex-col overflow-hidden shadow-2xl float-slow">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(52,211,153,0.08)_0%,transparent_50%)] glow-breathe" />
             <div className="relative z-10 flex items-center justify-between border-b border-white/10 pb-4 mb-6">
-              <div className="text-[11px] font-semibold tracking-widest uppercase text-white/40">Executive Console</div>
+              <div className="text-[11px] font-semibold tracking-widest uppercase text-white/40 flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 pulse-dot inline-block" /> Executive Console
+              </div>
               <div className="flex gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-rose-500/30"/><div className="w-2.5 h-2.5 rounded-full bg-amber-500/30"/><div className="w-2.5 h-2.5 rounded-full bg-emerald-500/30"/></div>
             </div>
             
             <div className="flex-1 space-y-6 relative z-10">
-               <div className="bg-white/5 rounded-xl p-4 border border-white/5 backdrop-blur-md">
+               <div data-oracle-box className="bg-white/5 rounded-xl p-4 border border-white/5 backdrop-blur-md card-hover">
                  <div className="text-[11px] font-medium uppercase tracking-wider text-white/40 mb-2">Executive Query</div>
                  <div className="text-[14px] text-white/90">"Generate a Q3 ISO 27001 compliance and drift report across all tenants. Include risk exposure factors."</div>
                </div>
                
-               <div className="bg-emerald-500/10 rounded-xl p-5 border border-emerald-500/20 ml-8 relative">
+               <div data-oracle-box className="bg-emerald-500/10 rounded-xl p-5 border border-emerald-500/20 ml-8 relative">
                  <div className="absolute -left-2.5 top-5 w-5 h-px bg-emerald-500/20" />
                  <div className="flex items-center gap-2 mb-3">
                    <Activity className="w-4 h-4 text-emerald-400" />

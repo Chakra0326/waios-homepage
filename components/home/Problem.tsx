@@ -1,13 +1,17 @@
 'use client'
 
+import { useRef } from 'react'
 import { motion } from 'framer-motion'
 import {
   Check, Circle,
   Bell, MessagesSquare, Ticket, GitPullRequest, ClipboardList, FileSearch, Workflow,
   KeyRound, } from 'lucide-react'
 import { Reveal, EASE } from "./Common"
+import { useStatCounter, useStrokeDraw } from '@/lib/useGsap'
 
 export function Problem() {
+  const statsRef = useRef<HTMLDivElement>(null)
+  const hubRef = useRef<HTMLDivElement>(null)
   const scattered = [
     { icon: Bell,           label: 'Alerts' },
     { icon: Ticket,         label: 'Tickets' },
@@ -19,11 +23,15 @@ export function Problem() {
     { icon: Workflow,       label: 'Manual glue' },
   ]
   const stats = [
-    { value: '70%', label: 'Manual Effort', desc: 'in traditional enterprise IT operations' },
-    { value: '241 Days', label: 'Time to Detect', desc: 'industry average MTTD for breaches' },
-    { value: '$4.44M', label: 'Average Breach Cost', desc: 'IBM 2025 global average cost' },
-    { value: '40%', label: 'Cloud Waste', desc: 'from misconfigured or idle resources' },
+    { value: '70', prefix: '', suffix: '%', label: 'Manual Effort', desc: 'in traditional enterprise IT operations' },
+    { value: '241', prefix: '', suffix: ' Days', label: 'Time to Detect', desc: 'industry average MTTD for breaches' },
+    { value: '4.44', prefix: '$', suffix: 'M', label: 'Average Breach Cost', desc: 'IBM 2025 global average cost' },
+    { value: '40', prefix: '', suffix: '%', label: 'Cloud Waste', desc: 'from misconfigured or idle resources' },
   ]
+
+  useStatCounter(statsRef)
+  useStrokeDraw(hubRef)
+
   return (
     <section className="relative py-24 md:py-32 hairline-b">
       <div className="max-w-6xl mx-auto px-6">
@@ -41,10 +49,18 @@ export function Problem() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <div className="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-8 py-8 border-y border-white/5 lg:divide-x divide-white/10">
-            {stats.map((s, i) => (
+          <div ref={statsRef} className="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-8 py-8 border-y border-white/5 lg:divide-x divide-white/10">
+            {stats.map((s) => (
               <div key={s.label} className="flex flex-col lg:pl-8 first:pl-0">
-                <div className="text-3xl md:text-4xl font-bold tracking-tight text-white">{s.value}</div>
+                <div className="text-3xl md:text-4xl font-bold tracking-tight text-white">
+                  <span
+                    data-stat-value={s.value}
+                    data-stat-prefix={s.prefix}
+                    data-stat-suffix={s.suffix}
+                  >
+                    {s.prefix}0{s.suffix}
+                  </span>
+                </div>
                 <div className="mt-2 text-[15px] font-medium text-white/80">{s.label}</div>
                 <div className="mt-1 text-[13px] text-dimmer leading-relaxed max-w-[200px]">{s.desc}</div>
               </div>
@@ -82,7 +98,7 @@ export function Problem() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="relative rounded-2xl border hairline p-8 h-full bg-[#0A0A0C] overflow-hidden">
+            <div ref={hubRef} className="relative rounded-2xl border hairline p-8 h-full bg-[#0A0A0C] overflow-hidden">
               <div className="text-[11px] tracking-widest uppercase text-[#FF6B1A]">With WAIOS</div>
               <div className="mt-2 text-white text-[18px] font-medium">One operational loop. One accountable chain.</div>
 
@@ -93,10 +109,8 @@ export function Problem() {
                     const x = 200 + Math.cos(angle) * 130
                     const y = 110 + Math.sin(angle) * 80
                     return (
-                      <motion.line key={i} x1={x} y1={y} x2={200} y2={110}
-                        stroke="rgba(255,255,255,0.18)" strokeWidth="1" strokeDasharray="3 3"
-                        initial={{ pathLength: 0, opacity: 0 }} whileInView={{ pathLength: 1, opacity: 1 }} viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.2 + i * 0.05 }} />
+                      <line key={i} data-draw-line x1={x} y1={y} x2={200} y2={110}
+                        stroke="rgba(255,255,255,0.18)" strokeWidth="1" strokeDasharray="3 3" />
                     )
                   })}
                 </svg>
@@ -106,8 +120,8 @@ export function Problem() {
                   const y = Math.sin(angle) * 80
                   const Icon = scattered[i].icon
                   return (
-                    <div key={i} className="absolute h-8 w-8 rounded-md border hairline bg-black grid place-items-center text-white/70"
-                      style={{ transform: `translate(${x}px, ${y}px)` }}>
+                    <div key={i} data-draw-icon className="absolute h-8 w-8 rounded-md border hairline bg-black grid place-items-center text-white/70"
+                      style={{ transform: `translate(${x}px, ${y}px)`, opacity: 0 }}>
                       <Icon className="h-3.5 w-3.5" />
                     </div>
                   )
@@ -139,4 +153,3 @@ export function Problem() {
     </section>
   )
 }
-

@@ -1,25 +1,49 @@
 'use client'
 
-import { ReactNode, useRef } from 'react'
-import { motion, useInView, animate } from 'framer-motion'
+import { ReactNode, useRef, useEffect } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import {
   Radar, Brain, Sparkles, Gavel, Cpu, Activity, } from 'lucide-react'
 
 export const EASE = [0.16, 1, 0.3, 1]
 
-export function Reveal({ children, delay = 0, y = 24, className = '' }: { children: ReactNode, delay?: number, y?: number, className?: string }) {
+export function Reveal({ children, delay = 0, y = 20, className = '' }: { children: ReactNode, delay?: number, y?: number, className?: string }) {
   const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    gsap.registerPlugin(ScrollTrigger)
+
+    const el = ref.current
+    if (!el) return
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        el,
+        { opacity: 0, y },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          delay,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 90%',
+            once: true,
+          },
+        }
+      )
+    }, el)
+
+    return () => ctx.revert()
+  }, [delay, y])
+
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y }}
-      transition={{ duration: 0.7, delay, ease: EASE }}
-      className={className}
-    >
+    <div ref={ref} className={className}>
       {children}
-    </motion.div>
+    </div>
   )
 }
 

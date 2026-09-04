@@ -1,18 +1,31 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, animate, AnimatePresence } from 'framer-motion'
 import {
   ChevronRight, } from 'lucide-react'
 import { Reveal, LOOP, EASE } from "./Common"
+import { useOrbitReveal } from '@/lib/useGsap'
 
 export function LoopRing({ active }: { active: number }) {
+  const ringRef = useRef<HTMLDivElement>(null)
   const R = 130
+
+  useOrbitReveal(ringRef)
+
   return (
-    <div className="relative mx-auto h-[360px] w-[360px] md:h-[420px] md:w-[420px]">
+    <div ref={ringRef} className="relative mx-auto h-[360px] w-[360px] md:h-[420px] md:w-[420px]">
       <svg viewBox="0 0 400 400" className="absolute inset-0 w-full h-full">
-        <circle cx="200" cy="200" r={R} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+        <circle cx="200" cy="200" r={R} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1"
+          data-orbit-path />
         <circle cx="200" cy="200" r={R + 22} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" strokeDasharray="2 5" />
+        <line x1="200" y1="200" x2="200" y2="70" stroke="url(#radar-grad)" strokeWidth="1.5" className="radar-sweep" opacity="0.6" />
+        <defs>
+          <linearGradient id="radar-grad" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0%" stopColor="#FF6B1A" stopOpacity="0" />
+            <stop offset="100%" stopColor="#FF6B1A" stopOpacity="0.8" />
+          </linearGradient>
+        </defs>
         <motion.circle cx="200" cy="200" r={R} fill="none" stroke="#FF6B1A" strokeWidth="1.5" strokeLinecap="round"
           strokeDasharray={2 * Math.PI * R}
           strokeDashoffset={2 * Math.PI * R * (1 - (active + 1) / 6)}
@@ -26,7 +39,7 @@ export function LoopRing({ active }: { active: number }) {
         const isActive = i === active
         const Icon = p.icon
         return (
-          <div key={p.key} className="absolute left-1/2 top-1/2" style={{ transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))` }}>
+          <div key={p.key} data-phase-icon className="absolute left-1/2 top-1/2" style={{ transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`, opacity: 0 }}>
             <motion.div animate={{ scale: isActive ? 1.06 : 1 }} transition={{ duration: 0.4, ease: EASE }} className="flex flex-col items-center gap-2">
               <div className={`h-12 w-12 rounded-full grid place-items-center border transition-colors duration-500 ${
                 isActive ? 'bg-white text-black border-white' : 'bg-black text-white/70 hairline'
@@ -127,4 +140,3 @@ export function Loop() {
     </section>
   )
 }
-

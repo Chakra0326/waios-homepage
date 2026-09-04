@@ -1,12 +1,12 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { motion, animate } from 'framer-motion'
 import {
   Play, Pause, RotateCcw, Check, Circle,
   TerminalSquare,
 } from 'lucide-react'
 import { Reveal, LiveDot } from "./Common"
+import { useEventStreamReveal } from '@/lib/useGsap'
 
 export const SCENARIO = [
   { phase: 'DISCOVER',   ts: '14:02:18', text: 'Signal ingested · compliance drift detected in production' },
@@ -26,26 +26,22 @@ export const SCENARIO = [
 ]
 
 export function Live() {
-  const [visible, setVisible] = useState(1)
   const [running, setRunning] = useState(true)
   const bodyRef = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLDivElement>(null)
+
+  useEventStreamReveal(sectionRef)
 
   useEffect(() => {
-    if (!running || visible >= SCENARIO.length) return
-    const t = setTimeout(() => setVisible((v) => v + 1), 780 + Math.random() * 520)
-    return () => clearTimeout(t)
-  }, [visible, running])
+    if (bodyRef.current) bodyRef.current.scrollTop = bodyRef.current.scrollHeight
+  }, [])
 
-  useEffect(() => { if (bodyRef.current) bodyRef.current.scrollTop = bodyRef.current.scrollHeight }, [visible])
-
-  const currentPhase = SCENARIO[Math.max(0, Math.min(visible - 1, SCENARIO.length - 1))].phase
+  const currentPhase = SCENARIO[SCENARIO.length - 1].phase
   const phaseIndex = ['DISCOVER','UNDERSTAND','DECIDE','APPROVE','ACT','LEARN'].indexOf(currentPhase)
   const passing = Math.min(8, Math.max(0, phaseIndex + 2))
-  const done = visible >= SCENARIO.length
-  const reset = () => { setVisible(1); setRunning(true) }
 
   return (
-    <section id="live" className="relative py-24 md:py-32 hairline-b">
+    <section id="live" ref={sectionRef} className="relative py-24 md:py-32 hairline-b">
       <div className="max-w-6xl mx-auto px-6">
         <Reveal>
           <div className="text-[12px] tracking-[0.24em] uppercase text-dimmer">See it in action</div>
@@ -87,49 +83,43 @@ export function Live() {
                   <button onClick={() => setRunning((r) => !r)} className="text-white/55 hover:text-white transition">
                     {running ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
                   </button>
-                  <button onClick={reset} className="text-white/55 hover:text-white transition"><RotateCcw className="h-3.5 w-3.5" /></button>
                 </div>
               </div>
               <div ref={bodyRef} className="term-scroll h-[440px] overflow-y-auto px-6 py-6 font-mono text-[13px] leading-[1.9]">
-                {SCENARIO.slice(0, visible).map((line, i) => (
-                  <motion.div key={i} initial={{ opacity: 0, y: 3 }} animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.25 }}
+                {SCENARIO.map((line, i) => (
+                  <div key={i} data-log-line
                     className="grid grid-cols-[70px_110px_1fr] gap-4 items-baseline">
                     <span className="text-white/30">{line.ts}</span>
                     <span className="inline-flex items-center justify-center h-[20px] rounded-full border hairline text-[10px] tracking-[0.16em] text-white/70 px-2">{line.phase}</span>
                     <span className={line.ok ? 'text-white' : 'text-white/60'}>
                       {line.ok && <span className="text-[#FF6B1A] mr-1.5">✔</span>}{line.text}
                     </span>
-                  </motion.div>
-                ))}
-                {visible < SCENARIO.length && running && <div className="mt-2 text-white/40"><span className="caret" /></div>}
-                {done && (
-                  <div className="mt-6 pt-5 hairline-t text-white/85">
-                    <span className="text-[#FF6B1A] mr-2">•</span>
-                    Resolved in 00:00:39. Signed audit trail written. No one paged out of hours.
                   </div>
-                )}
+                ))}
+                <div className="mt-6 pt-5 hairline-t text-white/85" data-log-line>
+                  <span className="text-[#FF6B1A] mr-2">•</span>
+                  Resolved in 00:00:39. Signed audit trail written. No one paged out of hours.
+                </div>
               </div>
             </div>
 
             <div className="lg:col-span-2 grid grid-cols-2 gap-4">
-              <div className="col-span-2 rounded-2xl border hairline bg-black/60 p-5">
+              <div data-side-panel className="col-span-2 rounded-2xl border hairline bg-black/60 p-5">
                 <div className="flex items-center justify-between">
                   <div className="text-[10.5px] tracking-[0.2em] uppercase text-dimmer">Risk</div>
                   <span className="text-[10.5px] font-mono text-dimmer">0–100</span>
                 </div>
                 <div className="mt-2 flex items-baseline gap-2">
-                  <div className={`text-[36px] font-mono ${phaseIndex >= 4 ? 'text-emerald-400' : 'text-[#FF6B1A]'}`}>
-                    {phaseIndex >= 4 ? '00' : '82'}
+                  <div className="text-[36px] font-mono text-emerald-400">
+                    00
                   </div>
-                  <div className="text-[12px] text-white/50">{phaseIndex >= 4 ? 'resolved' : 'high'}</div>
+                  <div className="text-[12px] text-white/50">resolved</div>
                 </div>
                 <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                  <motion.div className="h-full bg-white/70" initial={{ width: '82%' }}
-                    animate={{ width: phaseIndex >= 4 ? '4%' : '82%' }} transition={{ duration: 0.6 }} />
+                  <div className="h-full bg-white/70 w-[4%]" />
                 </div>
               </div>
-              <div className="rounded-2xl border hairline bg-black/60 p-5">
+              <div data-side-panel className="rounded-2xl border hairline bg-black/60 p-5">
                 <div className="flex items-center justify-between">
                   <div className="text-[10.5px] tracking-[0.2em] uppercase text-dimmer">Approval</div>
                   <div className="inline-flex items-center rounded-full border hairline px-2 py-0.5 text-[9px] font-medium tracking-widest uppercase text-white/50 bg-white/5">
@@ -143,21 +133,21 @@ export function Live() {
                   </div>
                   <div className="text-[12px] text-white/70">On‑call reviewer</div>
                 </div>
-                <div className={`mt-3 inline-flex items-center gap-1.5 text-[11.5px] ${phaseIndex >= 3 ? 'text-emerald-400' : 'text-amber-400'}`}>
-                  {phaseIndex >= 3 ? <Check className="h-3.5 w-3.5" /> : <Circle className="h-3 w-3" />}
-                  {phaseIndex >= 3 ? 'signed' : 'awaiting'}
+                <div className="mt-3 inline-flex items-center gap-1.5 text-[11.5px] text-emerald-400">
+                  <Check className="h-3.5 w-3.5" />
+                  signed
                 </div>
               </div>
-              <div className="rounded-2xl border hairline bg-black/60 p-5">
+              <div data-side-panel className="rounded-2xl border hairline bg-black/60 p-5">
                 <div className="text-[10.5px] tracking-[0.2em] uppercase text-dimmer">Health</div>
                 <div className="mt-3 grid grid-cols-4 gap-1.5">
                   {Array.from({ length: 8 }).map((_, i) => (
-                    <div key={i} className={`h-5 rounded-sm transition-colors duration-500 ${i < passing ? 'bg-emerald-400/85' : 'bg-white/10'}`} />
+                    <div key={i} className="h-5 rounded-sm bg-emerald-400/85" />
                   ))}
                 </div>
-                <div className="mt-2 text-[11.5px] text-white/60 font-mono">{passing}/8 passing</div>
+                <div className="mt-2 text-[11.5px] text-white/60 font-mono">8/8 passing</div>
               </div>
-              <div className="col-span-2 rounded-2xl border hairline bg-black/60 p-5">
+              <div data-side-panel className="col-span-2 rounded-2xl border hairline bg-black/60 p-5">
                 <div className="flex items-center justify-between">
                   <div className="text-[10.5px] tracking-[0.2em] uppercase text-dimmer">Audit trail</div>
                   <span className="text-[10.5px] font-mono text-white/50">signed · immutable</span>
@@ -184,4 +174,3 @@ export function Live() {
     </section>
   )
 }
-

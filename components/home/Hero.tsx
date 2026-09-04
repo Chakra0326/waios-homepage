@@ -16,8 +16,11 @@ export function Hero() {
         
         <Reveal delay={0.05}>
           <h1 className="text-[52px] md:text-[80px] lg:text-[96px] leading-[1.05] font-semibold tracking-[-0.04em] text-white text-balance max-w-4xl mx-auto">
-            From detection to resolution. <span className="text-dim">Autonomously.</span>
+            Deploy Once, Govern Globally. <span className="text-dim">The Enterprise CMDB Factory.</span>
           </h1>
+          <p className="mt-6 text-[18px] md:text-[20px] leading-relaxed text-dim max-w-3xl mx-auto text-balance">
+            Now your enterprise company can be managed automatically. Our Automated Software Factory continuously discovers, audits, and immunizes your infrastructure without manual human overhead.
+          </p>
         </Reveal>
         
         <Reveal delay={0.12}>
@@ -32,8 +35,8 @@ export function Hero() {
         </Reveal>
         
         <Reveal delay={0.18}>
-          <div className="mt-16 md:mt-24 w-full max-w-5xl mx-auto shadow-2xl relative">
-            <div className="absolute inset-0 bg-emerald-500/5 blur-3xl rounded-full" />
+          <div className="mt-16 md:mt-24 w-full max-w-5xl mx-auto shadow-2xl relative float-slow">
+            <div className="absolute inset-0 bg-emerald-500/10 blur-3xl rounded-full glow-breathe" />
             <MiniConsole />
           </div>
         </Reveal>
