@@ -26,13 +26,13 @@ export default function App() {
       <Industries />
       <Problem />
       <Loop />
-      <Architecture />
       <Live />
-      <SoftwareFactory />
+      <Architecture />
       <Evidence />
-      <CoreBrain />
       <Control />
       <SecurityTrust />
+      <CoreBrain />
+      <SoftwareFactory />
       <Oracle />
       <Roadmap />
       <CTA />
