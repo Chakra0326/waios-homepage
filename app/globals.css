@@ -83,9 +83,9 @@ select option { background: #0a0a0c; color: #f5f5f5; }
 
 /* Marquee */
 @keyframes marquee { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
-.marquee-track { animation: marquee 40s linear infinite; will-change: transform; backface-visibility: hidden; }
+.marquee-track { width: max-content; animation: marquee 40s linear infinite; will-change: transform; backface-visibility: hidden; }
 @media (max-width: 767px) {
-  .marquee-track { animation-duration: 10s; }
+  .marquee-track { animation-duration: 6s; }
 }
 
 /* Blink caret */

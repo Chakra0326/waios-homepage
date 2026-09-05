@@ -13,7 +13,7 @@ const trustSignals = [
 
 export function Hero() {
   return (
-    <section id="top" className="relative overflow-hidden noise grain flex flex-col items-center pt-24 md:pt-32 pb-20 md:pb-28">
+    <section id="top" className="relative overflow-hidden noise grain flex flex-col items-center pt-12 md:pt-16 pb-20 md:pb-28">
       <div className="max-w-7xl mx-auto px-6 w-full flex flex-col items-center text-center">
         <Reveal>
           <div className="inline-flex items-center gap-2 rounded-full border hairline px-3 py-1 text-[11.5px] text-white/70 mb-8">
