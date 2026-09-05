@@ -59,10 +59,10 @@ export function Problem() {
 
         <div className="mt-16 grid lg:grid-cols-2 gap-8 items-stretch">
           <Reveal>
-            <div className="relative rounded-2xl border hairline p-8 h-full bg-black/40 dot-grid overflow-hidden">
+            <div className="relative h-full overflow-hidden rounded-2xl border hairline bg-black/40 p-6 dot-grid sm:p-8">
               <div className="text-[11px] tracking-widest uppercase text-dimmer">Today</div>
               <div className="mt-2 text-white text-[18px] font-medium">Eight tools. One incident. Fragmented accountability.</div>
-              <div className="mt-8 grid grid-cols-4 gap-3">
+              <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {scattered.map((s, i) => {
                   const I = s.icon
                   return (
@@ -71,7 +71,7 @@ export function Problem() {
                       initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true, margin: '-40px' }}
                       transition={{ duration: 0.5, delay: i * 0.05, ease: EASE }}
-                      className="rounded-lg border hairline bg-black/60 p-3 flex flex-col items-start gap-2"
+                      className="flex min-w-0 flex-col items-start gap-2 rounded-lg border hairline bg-black/60 p-3"
                       style={{ transform: `rotate(${(i % 3) - 1}deg)` }}
                     >
                       <div className="h-7 w-7 rounded-md bg-white/5 grid place-items-center text-white/70"><I className="h-3.5 w-3.5" /></div>
