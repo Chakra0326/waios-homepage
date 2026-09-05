@@ -7,10 +7,9 @@ import {
   Bell, MessagesSquare, Ticket, GitPullRequest, ClipboardList, FileSearch, Workflow,
   KeyRound, } from 'lucide-react'
 import { Reveal, EASE } from "./Common"
-import { useStatCounter, useStrokeDraw } from '@/lib/useGsap'
+import { useStrokeDraw } from '@/lib/useGsap'
 
 export function Problem() {
-  const statsRef = useRef<HTMLDivElement>(null)
   const hubRef = useRef<HTMLDivElement>(null)
   const scattered = [
     { icon: Bell,           label: 'Alerts' },
@@ -22,14 +21,12 @@ export function Problem() {
     { icon: KeyRound,       label: 'Credentials' },
     { icon: Workflow,       label: 'Manual glue' },
   ]
-  const stats = [
-    { value: '70', prefix: '', suffix: '%', label: 'Manual Effort', desc: 'in traditional enterprise IT operations' },
-    { value: '241', prefix: '', suffix: ' Days', label: 'Time to Detect', desc: 'industry average MTTD for breaches' },
-    { value: '4.44', prefix: '$', suffix: 'M', label: 'Average Breach Cost', desc: 'IBM 2025 global average cost' },
-    { value: '40', prefix: '', suffix: '%', label: 'Cloud Waste', desc: 'from misconfigured or idle resources' },
+  const consequences = [
+    { label: 'Fragmented Context', desc: 'State and ownership live in separate systems.' },
+    { label: 'Manual Handoffs', desc: 'Detection, approval, and execution lose continuity.' },
+    { label: 'Unclear Authority', desc: 'Teams cannot quickly prove who authorized change.' },
+    { label: 'Lost Learning', desc: 'Verified resolutions are rarely retained for reuse.' },
   ]
-
-  useStatCounter(statsRef)
   useStrokeDraw(hubRef)
 
   return (
@@ -49,18 +46,10 @@ export function Problem() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <div ref={statsRef} className="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-8 py-8 border-y border-white/5 lg:divide-x divide-white/10">
-            {stats.map((s) => (
+          <div className="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-8 py-8 border-y border-white/5 lg:divide-x divide-white/10">
+            {consequences.map((s, i) => (
               <div key={s.label} className="flex flex-col lg:pl-8 first:pl-0">
-                <div className="text-3xl md:text-4xl font-bold tracking-tight text-white">
-                  <span
-                    data-stat-value={s.value}
-                    data-stat-prefix={s.prefix}
-                    data-stat-suffix={s.suffix}
-                  >
-                    {s.prefix}0{s.suffix}
-                  </span>
-                </div>
+                <div className="text-[11px] font-mono text-[#FF6B1A]">0{i + 1}</div>
                 <div className="mt-2 text-[15px] font-medium text-white/80">{s.label}</div>
                 <div className="mt-1 text-[13px] text-dimmer leading-relaxed max-w-[200px]">{s.desc}</div>
               </div>
@@ -72,7 +61,7 @@ export function Problem() {
           <Reveal>
             <div className="relative rounded-2xl border hairline p-8 h-full bg-black/40 dot-grid overflow-hidden">
               <div className="text-[11px] tracking-widest uppercase text-dimmer">Today</div>
-              <div className="mt-2 text-white text-[18px] font-medium">Eight tools. One incident. Zero accountability.</div>
+              <div className="mt-2 text-white text-[18px] font-medium">Eight tools. One incident. Fragmented accountability.</div>
               <div className="mt-8 grid grid-cols-4 gap-3">
                 {scattered.map((s, i) => {
                   const I = s.icon
@@ -92,7 +81,7 @@ export function Problem() {
                 })}
               </div>
               <div className="mt-6 flex items-center gap-2 text-[12px] text-white/55">
-                <Circle className="h-3 w-3 text-rose-400" /> No one can prove what happened, when, or who signed off.
+                <Circle className="h-3 w-3 text-rose-400" /> No single system preserves the complete chain of context, action, and authority.
               </div>
             </div>
           </Reveal>
@@ -132,7 +121,7 @@ export function Problem() {
               </div>
 
               <div className="mt-4 flex items-center gap-2 text-[12px] text-white/70">
-                <Check className="h-3.5 w-3.5 text-emerald-400" /> Context assembled once. Executed with control. Recorded forever.
+                <Check className="h-3.5 w-3.5 text-emerald-400" /> Context assembled once. Executed with control. Recorded as operational evidence.
               </div>
             </div>
           </Reveal>
@@ -145,7 +134,7 @@ export function Problem() {
               Everything runs on one source of truth.
             </h3>
             <p className="mt-4 text-[16px] md:text-[18px] leading-relaxed text-dim max-w-2xl">
-              Every discovery, decision, and action reads from and writes back to a single Modern CMDB. Not eight tools stitched together. One record, one Hub, one truth.
+              Every discovery, decision, incident, remediation, and verified state change connects back to one continuously maintained CMDB, giving WAIOS the context to reason about impact rather than treating resources as isolated records.
             </p>
           </div>
         </Reveal>

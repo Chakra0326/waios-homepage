@@ -18,17 +18,15 @@ export function Control() {
           </Reveal>
           <Reveal delay={0.05}>
             <p className="mt-6 text-[17px] md:text-[19px] leading-relaxed text-dim max-w-xl">
-              Every decision is reasoned. Every action is approved. Every step is recorded.
-              WAIOS runs from our infrastructure, never inside yours, and you can revoke it in a
-              single click.
+              Every decision follows policy. Sensitive actions require authorized human approval. Every operational step is recorded.
             </p>
           </Reveal>
           <Reveal delay={0.12}>
             <div className="mt-8 space-y-3 max-w-lg">
               {[
-                { k: 'Human in the loop where it matters', v: 'Governance is built into the run, not bolted on after.' },
-                { k: 'Signed, immutable record',            v: 'Every decision and action is written to a tamper-evident trail.' },
-                { k: 'Zero footprint inside your cloud',    v: 'We connect through revocable access, the same trust model you already use.' },
+                { k: 'Human in the loop where it matters', v: 'Critical production actions remain behind defined authorization boundaries.' },
+                { k: 'Encrypted, auditable record', v: 'Detection, risk, approval, remediation, and outcome evidence are recorded in the Forensic BlackBox.' },
+                { k: 'Controlled, revocable access', v: 'Scoped cloud-native permissions are used rather than permanent root credentials.' },
               ].map((r) => (
                 <div key={r.k} className="flex items-start gap-3">
                   <div className="mt-1 h-1.5 w-1.5 rounded-full bg-[#FF6B1A] shrink-0" />
@@ -42,8 +40,15 @@ export function Control() {
           </Reveal>
           <Reveal delay={0.18}>
             <a href="#trust-deep" className="mt-10 inline-flex items-center gap-1.5 text-[14px] text-white hover:opacity-80 transition">
-              How trust and control work <ArrowRight className="h-4 w-4" />
+              Explore the trust architecture <ArrowRight className="h-4 w-4" />
             </a>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <div className="mt-8 grid sm:grid-cols-3 gap-2 max-w-xl">
+              <div className="rounded-xl border hairline p-3"><div className="text-[10px] uppercase tracking-widest text-emerald-400">Low risk</div><div className="mt-2 text-[12px] text-white/65">Policy-approved autonomous execution</div></div>
+              <div className="rounded-xl border hairline p-3"><div className="text-[10px] uppercase tracking-widest text-amber-400">Medium risk</div><div className="mt-2 text-[12px] text-white/65">Policy-based execution or human review</div></div>
+              <div className="rounded-xl border border-[#FF6B1A]/25 p-3"><div className="text-[10px] uppercase tracking-widest text-[#FF6B1A]">High / critical</div><div className="mt-2 text-[12px] text-white/65">Mandatory authorized human approval</div></div>
+            </div>
           </Reveal>
         </div>
 
@@ -74,7 +79,7 @@ export function Control() {
                 </div>
               </div>
               <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-[11px] tracking-widest uppercase text-white/50">
-                approved · signed · recorded
+                policy · authority · evidence
               </div>
             </div>
           </Reveal>
@@ -83,4 +88,3 @@ export function Control() {
     </section>
   )
 }
-

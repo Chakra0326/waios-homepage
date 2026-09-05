@@ -28,7 +28,7 @@ export function LoopRing({ active }: { active: number }) {
         </defs>
         <motion.circle cx="200" cy="200" r={R} fill="none" stroke="#FF6B1A" strokeWidth="1.5" strokeLinecap="round"
           strokeDasharray={2 * Math.PI * R}
-          strokeDashoffset={2 * Math.PI * R * (1 - (active + 1) / 6)}
+          strokeDashoffset={2 * Math.PI * R * (1 - (active + 1) / LOOP.length)}
           transform="rotate(-90 200 200)"
           transition={{ duration: 0.6, ease: EASE }} />
       </svg>
@@ -79,8 +79,7 @@ export function Loop() {
             One event. <span className="text-dim">One accountable chain.</span>
           </h2>
           <p className="mt-5 text-[17px] md:text-[19px] leading-relaxed text-dim max-w-2xl">
-            Every operation moves through the same six phases. The same ones an experienced operator
-            would follow, run with the discipline of a system.
+            Discover → Understand → Decide → Approve → Act → Verify → Learn. Every operation follows the same governed, evidence-backed loop.
           </p>
         </Reveal>
 

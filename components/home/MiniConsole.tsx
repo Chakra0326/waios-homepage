@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence, animate } from 'framer-motion'
 import {
   Check, FileCheck2,
@@ -8,7 +8,7 @@ import {
 import { LiveDot, EASE } from "./Common"
 
 export function MiniConsole() {
-  const steps = ['DISCOVER','UNDERSTAND','DECIDE','APPROVE','ACT','LEARN']
+  const steps = ['DISCOVER','UNDERSTAND','DECIDE','APPROVE','ACT','VERIFY','LEARN']
   const [phase, setPhase] = useState(0)
   const [approved, setApproved] = useState(false)
 
@@ -20,11 +20,7 @@ export function MiniConsole() {
     return () => clearInterval(t)
   }, [])
 
-  const spark = useMemo(() => {
-    const pts = []; let v = 0.62
-    for (let i = 0; i < 32; i++) { v = Math.max(0.05, Math.min(0.95, v + (Math.random() - 0.5) * 0.22)); pts.push(v) }
-    return pts
-  }, [])
+  const spark = [0.62,0.54,0.48,0.57,0.51,0.46,0.55,0.63,0.68,0.74,0.7,0.64,0.58,0.52,0.49,0.43,0.51,0.47,0.4,0.36,0.42,0.5,0.56,0.61,0.58,0.66,0.7,0.65,0.72,0.76,0.69,0.73]
 
   return (
     <div className="relative w-full">
@@ -35,16 +31,16 @@ export function MiniConsole() {
             <div className="h-3 w-3 rounded-full bg-white/15" />
             <div className="h-3 w-3 rounded-full bg-white/15" />
             <div className="h-3 w-3 rounded-full bg-white/15" />
-            <span className="ml-3 font-mono text-[14px] text-white/50">waios.console · live</span>
+            <span className="ml-3 font-mono text-[14px] text-white/50">waios.console · workflow preview</span>
           </div>
-          <span className="inline-flex items-center gap-2 text-[13px] text-white/60"><LiveDot /> operating</span>
+          <span className="status-reference">Representative</span>
         </div>
 
         <div className="grid grid-cols-5 gap-0">
           <div className="col-span-3 hairline-r p-8">
             <div className="flex items-center justify-between mb-4">
               <div className="text-[13px] tracking-[0.18em] uppercase text-white/40">Active event</div>
-              <span className="text-[13px] font-mono text-white/45">EVT‑88214</span>
+              <span className="text-[13px] font-mono text-white/45">DEMO EVENT</span>
             </div>
             <div className="text-[20px] text-white font-medium">Compliance drift detected</div>
             <div className="mt-1.5 text-[15px] text-white/55">Production, cloud storage layer</div>
@@ -53,11 +49,11 @@ export function MiniConsole() {
               <div className="flex items-baseline justify-between">
                 <div>
                   <div className="text-[12px] uppercase tracking-widest text-white/40">Risk</div>
-                  <div className="text-[32px] font-mono text-white mt-1">82<span className="text-white/45 text-[18px]">/100</span></div>
+                  <div className="text-[24px] font-mono text-white mt-1">EVALUATED</div>
                 </div>
                 <div className="text-right">
                   <div className="text-[12px] uppercase tracking-widest text-white/40">Class</div>
-                  <div className="text-[15px] font-mono text-red-600 mt-1">CRITICAL</div>
+                  <div className="text-[15px] font-mono text-amber-400 mt-1">HIGH IMPACT</div>
                 </div>
               </div>
               <svg viewBox="0 0 120 32" className="mt-4 w-full h-14" preserveAspectRatio="none">
@@ -97,8 +93,7 @@ export function MiniConsole() {
               </div>
               <div className="mt-4 flex items-center gap-3">
                 <div className="flex -space-x-2">
-                  <div className="h-8 w-8 rounded-full bg-white/10 border hairline grid place-items-center text-[12px] text-white/80">SM</div>
-                  <div className="h-8 w-8 rounded-full bg-white/10 border hairline grid place-items-center text-[12px] text-white/80">JK</div>
+                  <div className="h-8 w-8 rounded-full bg-white/10 border hairline grid place-items-center text-[12px] text-white/80">H</div>
                 </div>
                 <div className="text-[14px] text-white/70">On‑call reviewer</div>
               </div>
@@ -124,9 +119,9 @@ export function MiniConsole() {
               <div className="text-[12px] uppercase tracking-widest text-white/40">Audit trail</div>
               <div className="mt-3 flex items-center gap-2.5">
                 <FileCheck2 className="h-5 w-5 text-white/70" />
-                <div className="text-[14px] text-white/70 font-mono">signed · immutable</div>
+                <div className="text-[14px] text-white/70 font-mono">encrypted · auditable</div>
               </div>
-              <div className="mt-1.5 text-[13px] text-white/45">every step, forever</div>
+              <div className="mt-1.5 text-[13px] text-white/45">operational evidence retained</div>
             </div>
           </div>
         </div>
@@ -142,4 +137,3 @@ export function MiniConsole() {
     </div>
   )
 }
-

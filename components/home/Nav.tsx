@@ -17,19 +17,20 @@ export function Nav() {
         <nav className="hidden md:flex items-center gap-8 text-[13.5px] text-dim absolute left-1/2 -translate-x-1/2">
           <a href="#platform" className="hover:text-white transition">Platform</a>
           <a href="#architecture" className="hover:text-white transition">Architecture</a>
-          <a href="#trust" className="hover:text-white transition">Trust</a>
+          <a href="#trust" className="hover:text-white transition">Security &amp; Trust</a>
+          <a href="#live" className="hover:text-white transition">Workflow</a>
+          <a href="#pricing" className="hover:text-white transition">Pricing</a>
           <a href="#contact" className="hover:text-white transition">Contact</a>
         </nav>
         <div className="flex items-center gap-3">
           <a href="#live" className="hidden sm:inline-flex items-center gap-1.5 text-[13px] text-white/85 hover:text-white transition">
             See it in action
           </a>
-          <a href="#contact" className="inline-flex items-center gap-1.5 rounded-full bg-white text-black px-3.5 py-1.5 text-[13px] font-medium hover:bg-white/90 transition">
-            Book a demo <ArrowRight className="h-3.5 w-3.5" />
+          <a href="#architecture" className="inline-flex items-center gap-1.5 rounded-full bg-white text-black px-3.5 py-1.5 text-[13px] font-medium hover:bg-white/90 transition">
+            Architecture <ArrowRight className="h-3.5 w-3.5" />
           </a>
         </div>
       </div>
     </header>
   )
 }
-

@@ -4,7 +4,7 @@ import { ReactNode, useRef, useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import {
-  Radar, Brain, Sparkles, Gavel, Cpu, Activity, } from 'lucide-react'
+  Radar, Brain, Sparkles, Gavel, Cpu, Activity, ShieldCheck, } from 'lucide-react'
 
 export const EASE = [0.16, 1, 0.3, 1]
 
@@ -56,10 +56,11 @@ export function LiveDot({ className = 'text-emerald-400' }: { className?: string
 }
 
 export const LOOP = [
-  { key: 'discover',   label: 'Discover',   icon: Radar,    caption: 'Signals from every system, continuously.', detail: 'WAIOS continuously pulls signals from every connected system (logs, metrics, alerts, and configuration states) the moment they change, without polling delays or manual checks.' },
+  { key: 'discover', label: 'Discover', icon: Radar, caption: 'Infrastructure state and events are discovered.', detail: 'AWS inventory, configuration, and event sources feed the current operational picture.' },
   { key: 'understand', label: 'Understand', icon: Brain,    caption: 'Context is assembled. Risk is measured.', detail: 'Every signal is cross-referenced against the CMDB to build full context: what changed, what it affects, and how severe it is. Risk is scored automatically before any decision is made.' },
   { key: 'decide',     label: 'Decide',     icon: Sparkles, caption: 'A plan is proposed, scored against impact.', detail: "A remediation plan is generated and scored against business impact, including a rollback path, before it's ever put in front of a human." },
-  { key: 'approve',    label: 'Approve',    icon: Gavel,    caption: 'Every high-impact change routes to a one-click Change Advisory Board gate. No meetings, no delay. Just a signed human decision before anything executes.', detail: 'Every high-impact change routes to a one-click Change Advisory Board gate. No meetings, no delay. Just a signed human decision before anything executes.' },
-  { key: 'act',        label: 'Act',        icon: Cpu,      caption: 'Execution happens with control, not with static keys.', detail: 'Execution happens with scoped, single-use access, never static keys or standing credentials, so every action is controlled and time-boxed.' },
-  { key: 'learn',      label: 'Learn',      icon: Activity, caption: 'Every decision leaves a signed, auditable record.', detail: 'Every decision and outcome is written to a signed, immutable audit trail, and the pattern is reinforced so the system gets sharper with each event.' },
+  { key: 'approve', label: 'Approve', icon: Gavel, caption: 'Policy determines where human authority is required.', detail: 'Low-risk actions may be policy-approved; critical actions require authorized Human-in-the-Loop approval.' },
+  { key: 'act', label: 'Act', icon: Cpu, caption: 'Controlled remediation executes with a restore path.', detail: 'WAIOS performs the operational work through controlled cloud-native permissions.' },
+  { key: 'verify', label: 'Verify', icon: ShieldCheck, caption: 'Expected state is validated; rollback remains available.', detail: 'Execution is not success until the resulting infrastructure state is verified.' },
+  { key: 'learn', label: 'Learn', icon: Activity, caption: 'CMDB, BlackBox, and KEDB retain the outcome.', detail: 'The current state, operational evidence, and verified remediation knowledge are updated.' },
 ]

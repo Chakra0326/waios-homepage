@@ -13,6 +13,10 @@ import { Oracle } from "@/components/home/Oracle"
 import { Pricing } from "@/components/home/Pricing"
 import { CTA } from "@/components/home/CTA"
 import { Footer } from "@/components/home/Footer"
+import { Architecture } from "@/components/home/Architecture"
+import { SecurityTrust } from "@/components/home/SecurityTrust"
+import { Roadmap } from "@/components/home/Roadmap"
+import { Evidence } from "@/components/home/Evidence"
 
 
 export default function App() {
@@ -23,11 +27,15 @@ export default function App() {
       <Industries />
       <Problem />
       <Loop />
+      <Architecture />
       <Live />
       <SoftwareFactory />
+      <Evidence />
       <CoreBrain />
       <Control />
+      <SecurityTrust />
       <Oracle />
+      <Roadmap />
       <Pricing />
       <CTA />
       <Footer />

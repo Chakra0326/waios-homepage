@@ -21,7 +21,7 @@ export function Industries() {
   return (
     <div className="fixed bottom-0 left-0 w-full z-40 py-3 hairline-t bg-black/80 backdrop-blur-md">
       <div className="w-full px-6 flex flex-col md:flex-row md:items-center gap-6">
-        <div className="text-[11.5px] tracking-[0.22em] uppercase text-dimmer md:w-56 shrink-0">Built for the operations of</div>
+        <div className="text-[11.5px] tracking-[0.22em] uppercase text-dimmer md:w-72 shrink-0">Designed for complex operations across</div>
         <div className="relative overflow-hidden mask-fade-r flex-1">
           <div className="marquee-track flex items-center gap-12 whitespace-nowrap">
             {doubled.map((it, i) => {
@@ -38,4 +38,3 @@ export function Industries() {
     </div>
   )
 }
-
