@@ -15,7 +15,7 @@ export function Nav() {
           <span className="text-[15px] font-medium tracking-tight text-white">WAIOS</span>
         </a>
         <nav className="hidden md:flex items-center gap-8 text-[13.5px] text-dim absolute left-1/2 -translate-x-1/2">
-          <a href="/#platform" className="hover:text-white transition">Platform</a>
+          <a href="/#top" className="hover:text-white transition">Platform</a>
           <a href="/#architecture" className="hover:text-white transition">Architecture</a>
           <a href="/#trust" className="hover:text-white transition">Security &amp; Trust</a>
           <a href="/#live" className="hover:text-white transition">Workflow</a>
