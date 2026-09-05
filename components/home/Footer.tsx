@@ -3,7 +3,7 @@
 import { LiveDot } from './Common'
 
 const columns = [
-  ['Product', [['Platform', '/#platform'], ['How it works', '/#platform'], ['See it in action', '/#live']]],
+  ['Product', [['Platform', '/#top'], ['How it works', '/#platform'], ['See it in action', '/#live']]],
   ['Architecture', [['Architecture', '/#architecture'], ['Autonomous CMDB', '/#architecture'], ['Trust & Control', '/#trust'], ['Security', '/security']]],
   ['Company', [['About', '/about'], ['Contact', '/contact']]],
 ] as const
