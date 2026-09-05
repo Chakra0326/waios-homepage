@@ -52,10 +52,10 @@ export function Hero() {
         </Reveal>
 
         <Reveal delay={0.25}>
-          <div className="mt-20 grid w-full max-w-5xl grid-cols-2 gap-px overflow-hidden rounded-2xl border hairline bg-white/[0.08] md:mt-28 sm:grid-cols-4">
+          <div className="mt-20 grid w-full max-w-5xl auto-rows-fr grid-cols-2 gap-px overflow-hidden rounded-2xl border hairline bg-white/[0.08] md:mt-28 sm:grid-cols-4">
             {trustSignals.map((signal) => (
-              <span key={signal} className="flex min-h-[72px] items-center justify-center gap-2 bg-[#070708] px-3 py-4 text-center text-[9px] font-medium uppercase leading-4 tracking-[0.13em] text-white/55 sm:text-[10px]">
-                <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400 shadow-[0_0_7px_rgba(52,211,153,0.55)]" />
+              <span key={signal} className="relative flex min-h-[88px] items-end justify-center bg-[#070708] px-3 pb-4 pt-10 text-center text-[9px] font-medium uppercase leading-4 tracking-[0.13em] text-white/55 sm:text-[10px]">
+                <span aria-hidden="true" className="absolute left-1/2 top-5 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-emerald-400 shadow-[0_0_7px_rgba(52,211,153,0.55)]" />
                 {signal}
               </span>
             ))}
