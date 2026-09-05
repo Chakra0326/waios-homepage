@@ -8,9 +8,9 @@ const columns = [
   ['Company', [['About', '/about'], ['Contact', '/contact']]],
 ] as const
 
-export function Footer() {
+export function Footer({ floatingBarOffset = false }: { floatingBarOffset?: boolean }) {
   return (
-    <footer className="hairline-t pb-14">
+    <footer className={`hairline-t ${floatingBarOffset ? 'pb-32 md:pb-14' : 'pb-14'}`}>
       <div className="mx-auto flex max-w-[1400px] flex-col justify-between gap-12 px-6 py-16 md:px-8 lg:flex-row">
         <div>
           <a href="/" className="flex items-center gap-2.5" aria-label="WAIOS home">
