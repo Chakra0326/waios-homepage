@@ -19,7 +19,6 @@ export function Nav() {
           <a href="/#architecture" className="hover:text-white transition">Architecture</a>
           <a href="/#trust" className="hover:text-white transition">Security &amp; Trust</a>
           <a href="/#live" className="hover:text-white transition">Workflow</a>
-          <a href="/#pricing" className="hover:text-white transition">Pricing</a>
           <a href="/contact" className="hover:text-white transition">Contact</a>
         </nav>
         <div className="flex items-center gap-3">
