@@ -4,6 +4,13 @@ import { ArrowRight } from 'lucide-react'
 import { Reveal, LiveDot } from "./Common"
 import { MiniConsole } from "./MiniConsole"
 
+const trustSignals = [
+  'ITIL-aligned operations',
+  'ISO control-mapped architecture',
+  'AWS Live',
+  'Human-Governed Autonomy',
+]
+
 export function Hero() {
   return (
     <section id="top" className="relative overflow-hidden noise grain flex flex-col items-center pt-24 md:pt-32 pb-20 md:pb-28">
@@ -45,14 +52,13 @@ export function Hero() {
         </Reveal>
 
         <Reveal delay={0.25}>
-          <div className="mt-20 md:mt-28 flex flex-wrap justify-center items-center gap-x-4 gap-y-2 text-[13px] font-semibold tracking-widest uppercase text-white/40">
-            <span>ITIL-aligned operations</span>
-            <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
-            <span>ISO control-mapped architecture</span>
-            <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
-            <span>AWS Live</span>
-            <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
-            <span>Human-Governed Autonomy</span>
+          <div className="mt-20 grid w-full max-w-5xl grid-cols-2 gap-px overflow-hidden rounded-2xl border hairline bg-white/[0.08] md:mt-28 sm:grid-cols-4">
+            {trustSignals.map((signal) => (
+              <span key={signal} className="flex min-h-[72px] items-center justify-center gap-2 bg-[#070708] px-3 py-4 text-center text-[9px] font-medium uppercase leading-4 tracking-[0.13em] text-white/55 sm:text-[10px]">
+                <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400 shadow-[0_0_7px_rgba(52,211,153,0.55)]" />
+                {signal}
+              </span>
+            ))}
           </div>
         </Reveal>
       </div>
