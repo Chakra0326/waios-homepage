@@ -47,11 +47,11 @@ export function Hero() {
         <Reveal delay={0.25}>
           <div className="mt-20 md:mt-28 flex flex-wrap justify-center items-center gap-x-4 gap-y-2 text-[13px] font-semibold tracking-widest uppercase text-white/40">
             <span>ITIL-aligned operations</span>
-            <span className="text-emerald-400/80">&middot;</span>
+            <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
             <span>ISO control-mapped architecture</span>
-            <span className="text-emerald-400/80">&middot;</span>
+            <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
             <span>AWS Live</span>
-            <span className="text-emerald-400/80">&middot;</span>
+            <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
             <span>Human-Governed Autonomy</span>
           </div>
         </Reveal>
