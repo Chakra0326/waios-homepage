@@ -16,7 +16,7 @@ export const SCENARIO = [
   { phase: 'DECIDE', text: 'Known remediation knowledge checked.' },
   { phase: 'DECIDE', text: 'Restore and rollback path prepared.' },
   { phase: 'APPROVE', text: 'Governance policy evaluated.' },
-  { phase: 'APPROVE', text: 'Authorized human approval required for high-impact action.' },
+  { phase: 'APPROVE', text: 'Human-in-the-Loop approval required for high-impact action.' },
   { phase: 'ACT', text: 'Controlled remediation executed.' },
   { phase: 'VERIFY', ok: true, text: 'Result validated against expected infrastructure state.' },
   { phase: 'LEARN', ok: true, text: 'CMDB updated and encrypted audit record written.' },

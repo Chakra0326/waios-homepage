@@ -18,7 +18,7 @@ export function Control() {
           </Reveal>
           <Reveal delay={0.05}>
             <p className="mt-6 text-[17px] md:text-[19px] leading-relaxed text-dim max-w-xl">
-              Every decision follows policy. Sensitive actions require authorized human approval. Every operational step is recorded.
+              Policy determines whether execution may proceed autonomously or must stop at the Human-in-the-Loop approval gate.
             </p>
           </Reveal>
           <Reveal delay={0.08}>
@@ -28,10 +28,9 @@ export function Control() {
           <Reveal delay={0.12}>
             <div className="mt-8 space-y-3 max-w-lg">
               {[
-                { k: 'Human in the loop where it matters', v: 'Critical production actions remain behind defined authorization boundaries.' },
-                { k: 'Encrypted, auditable record', v: 'Detection, risk, approval, remediation, and outcome evidence are recorded in the Forensic BlackBox.' },
-                { k: 'Controlled, revocable access', v: 'Scoped cloud-native permissions are used rather than permanent root credentials.' },
-                { k: 'AI is not the authorization boundary', v: 'Identity and backend policy determine whether an action can execute.' },
+                { k: 'AI advises', v: 'Analysis and recommendations do not grant permission to execute.' },
+                { k: 'Policy authorizes', v: 'The backend policy decision determines whether execution may proceed.' },
+                { k: 'Humans retain the gate', v: 'High-impact actions require Human-in-the-Loop approval.' },
               ].map((r) => (
                 <div key={r.k} className="flex items-start gap-3">
                   <div className="mt-1 h-1.5 w-1.5 rounded-full bg-[#FF6B1A] shrink-0" />
@@ -52,7 +51,7 @@ export function Control() {
             <div className="mt-8 grid sm:grid-cols-3 gap-2 max-w-xl">
               <div className="rounded-xl border hairline p-3"><div className="text-[10px] uppercase tracking-widest text-emerald-400">Low risk</div><div className="mt-2 text-[12px] text-white/65">Policy-approved autonomous execution</div></div>
               <div className="rounded-xl border hairline p-3"><div className="text-[10px] uppercase tracking-widest text-amber-400">Medium risk</div><div className="mt-2 text-[12px] text-white/65">Policy-based execution or human review</div></div>
-              <div className="rounded-xl border border-[#FF6B1A]/25 p-3"><div className="text-[10px] uppercase tracking-widest text-[#FF6B1A]">High / critical</div><div className="mt-2 text-[12px] text-white/65">Mandatory authorized human approval</div></div>
+              <div className="rounded-xl border border-[#FF6B1A]/25 p-3"><div className="text-[10px] uppercase tracking-widest text-[#FF6B1A]">High / critical</div><div className="mt-2 text-[12px] text-white/65">Mandatory Human-in-the-Loop approval</div></div>
             </div>
           </Reveal>
         </div>

@@ -1,24 +1,42 @@
 'use client'
 
-import { KeyRound, UserCheck, LockKeyhole, FileSearch, Layers3, MapPin, LifeBuoy, Cloud } from 'lucide-react'
+import { ArrowRight, Cloud, KeyRound, Layers3, LifeBuoy, LockKeyhole } from 'lucide-react'
 import { Reveal } from './Common'
 
-const trust = [
-  ['Identity & Access','Controlled cloud-native access patterns avoid permanent root credentials. Future Spokes use revocable, scoped identity relationships.',KeyRound,''],
-  ['Human-in-the-Loop','High-impact production actions remain behind defined human authorization boundaries.',UserCheck,''],
-  ['Encryption','Forensic BlackBox records are encrypted at rest using AWS KMS. Full WORM immutability is not claimed.',LockKeyhole,''],
-  ['Auditability','Detection, risk, approval, remediation, verification, rollback, and outcomes can be recorded as operational evidence.',FileSearch,''],
-  ['Tenant Isolation','Identity, authorization, policy, and the data layer—not prompts—must enforce tenant-scoped access.',Layers3,'In development'],
-  ['Data Residency','The current foundation runs in AWS. Enterprise residency options depend on the selected deployment architecture.',MapPin,''],
-  ['Disaster Recovery','Restore-point, rollback, and standby/failover work support continuity without implying global DR certification.',LifeBuoy,'In development'],
+const protections = [
+  { title: 'Identity & Access', body: 'Current AWS controls use scoped cloud-native access patterns. Identity-bound enterprise approver controls remain in development.', icon: KeyRound, status: 'In development', statusClass: 'status-development' },
+  { title: 'Encryption', body: 'Forensic BlackBox records are encrypted at rest using AWS KMS. Full WORM immutability is not claimed.', icon: LockKeyhole, status: 'Verified', statusClass: 'status-live' },
+  { title: 'Tenant Isolation', body: 'Designed to be enforced by identity, authorization, policy, and the data layer—never by an AI prompt.', icon: Layers3, status: 'In development', statusClass: 'status-development' },
+  { title: 'Business Continuity', body: 'Restore and rollback foundations are verified. Broader DR controls and failover capabilities continue to be developed.', icon: LifeBuoy, status: 'In development', statusClass: 'status-development' },
 ]
 
 export function SecurityTrust() {
-  return <section id="trust-deep" className="py-24 md:py-32 hairline-b">
-    <div className="max-w-6xl mx-auto px-6">
-      <Reveal><div className="text-[12px] tracking-[0.24em] uppercase text-dimmer">Security &amp; Trust</div><h2 className="mt-5 text-[34px] md:text-[56px] leading-[1.02] font-semibold tracking-[-0.025em] text-white">Trust is part of <span className="text-dim">the architecture.</span></h2></Reveal>
-      <div className="mt-14 grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/10 border border-white/10 rounded-2xl overflow-hidden">{trust.map(([title,body,Icon,status]: any) => <Reveal key={title} className="bg-[#070707] p-6"><div className="flex items-center justify-between gap-4"><Icon className="h-5 w-5 text-emerald-400"/>{status&&<span className="status-development">{status}</span>}</div><h3 className="mt-5 text-[16px] text-white">{title}</h3><p className="mt-2 text-[13.5px] leading-relaxed text-dim">{body}</p></Reveal>)}</div>
-      <Reveal><div className="mt-8 rounded-2xl border hairline bg-[#0A0A0C] p-6 md:p-8 grid lg:grid-cols-[1fr_1.4fr] gap-8"><div><div className="flex items-center gap-2"><Cloud className="h-4 w-4 text-[#FF6B1A]"/><span className="text-[11px] tracking-widest uppercase text-white/50">Current AWS foundation</span></div><div className="mt-4 flex flex-wrap gap-2">{['Lambda','AWS Config','EventBridge','SQS','SSM','CloudWatch','KMS','EC2 reference infrastructure','AWS-native identity'].map(x => <span key={x} className="rounded-full border hairline px-3 py-1 text-[11px] text-white/65">{x}</span>)}</div></div><div><div className="text-[12px] uppercase tracking-widest text-white/50">Certification status</div><p className="mt-3 text-[14px] text-dim leading-relaxed">Supports implementation and evidence collection for selected controls. Control mapping and automation do not constitute formal certification. Certification is a separate independent assessment process.</p><p className="mt-3 text-[12px] text-white/40">ISO/IEC 27001 security · ISO/IEC 20000-1 service management · ISO 22301 business continuity — control mapping.</p></div></div></Reveal>
-    </div>
-  </section>
+  return (
+    <section id="trust-deep" className="py-24 md:py-32 hairline-b">
+      <div className="max-w-6xl mx-auto px-6">
+        <Reveal>
+          <div className="text-[12px] tracking-[0.24em] uppercase text-dimmer">Security &amp; Trust</div>
+          <h2 className="mt-5 text-[34px] md:text-[56px] leading-[1.02] font-semibold tracking-[-0.025em] text-white">Protected by architecture, <span className="text-dim">not promises.</span></h2>
+          <p className="mt-5 max-w-3xl text-[17px] md:text-[19px] leading-relaxed text-dim">A compact view of the current protection model and the controls still being built. Detailed authority, Responsible AI, BlackBox, continuity, and compliance information lives in the Security &amp; Trust center.</p>
+        </Reveal>
+
+        <div className="mt-14 grid gap-px overflow-hidden border-y border-white/10 bg-white/10 md:grid-cols-2">
+          {protections.map(({ title, body, icon: Icon, status, statusClass }) => (
+            <Reveal key={title} className="bg-[#070707] px-6 py-7 md:px-8">
+              <div className="flex items-center justify-between gap-4"><Icon className="h-5 w-5 text-emerald-400"/><span className={statusClass}>{status}</span></div>
+              <h3 className="mt-5 text-[16px] text-white">{title}</h3>
+              <p className="mt-2 text-[13.5px] leading-relaxed text-dim">{body}</p>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal>
+          <div className="mt-8 flex flex-col justify-between gap-6 border-l border-[#FF6B1A]/60 pl-5 md:flex-row md:items-center">
+            <div><div className="flex items-center gap-2"><Cloud className="h-4 w-4 text-[#FF6B1A]"/><span className="text-[11px] tracking-widest uppercase text-white/50">Current AWS foundation</span></div><p className="mt-2 max-w-3xl text-[13px] leading-6 text-dim">Supports implementation and evidence collection for selected ISO/IEC 27001, ISO/IEC 20000-1, and ISO 22301 controls. This does not constitute certification.</p></div>
+            <a href="/security" className="inline-flex shrink-0 items-center gap-2 text-[13px] font-medium text-white transition hover:text-[#FF6B1A]">Open Security &amp; Trust <ArrowRight className="h-4 w-4"/></a>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  )
 }

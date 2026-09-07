@@ -11,28 +11,29 @@ const evidenceFlow = ['Event detected','Resource identified','Risk evaluated','R
 
 export default function SecurityPage() {
   return (
-    <InfoPageLayout wide eyebrow="Security & Trust" title="Security and governance by design." intro="AI advises. Policy authorizes. WAIOS executes. BlackBox proves. Identity and backend policy—not an AI prompt—define the authority boundary.">
+    <InfoPageLayout wide eyebrow="Security & Trust" title="Security and governance by design." intro="AI advises. Policy authorizes. WAIOS executes. BlackBox proves. Backend policy—not an AI prompt—determines whether an action may execute.">
       <InfoSection title="Authority remains explicit">
         <p className="text-[20px] font-medium text-white">Autonomy does not remove authority.</p>
-        <div className="grid gap-4 md:grid-cols-3"><SignalCard label="Low risk">Policy-approved autonomous execution.</SignalCard><SignalCard label="Medium risk">Policy-controlled execution or authorized human review.</SignalCard><SignalCard label="High / Critical">Mandatory approval by an authorized human.</SignalCard></div>
-        <p>The AI does not grant itself authority, cannot bypass identity or policy, and cannot decide that its own output is permission to execute. The backend evaluates whether a proposed action is allowed.</p>
+        <div className="grid gap-4 md:grid-cols-3"><SignalCard label="Low risk">Policy-approved autonomous execution.</SignalCard><SignalCard label="Medium risk">Policy-controlled execution or Human-in-the-Loop review.</SignalCard><SignalCard label="High / Critical">Mandatory Human-in-the-Loop approval.</SignalCard></div>
+        <p>The AI does not grant itself authority, cannot bypass policy, and cannot decide that its own output is permission to execute. The backend evaluates whether a proposed action is allowed.</p>
       </InfoSection>
 
       <InfoSection title="Security architecture">
         <div className="grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 md:grid-cols-2 lg:grid-cols-3">{[
           ['Identity & Access','Scoped, revocable cloud-native permissions. No permanent root credentials as the target architecture.','Live foundation'],
-          ['Human-in-the-Loop','Sensitive actions stay behind defined, authorized human approval boundaries.','Live'],
+          ['Human-in-the-Loop','Sensitive actions remain behind a Human-in-the-Loop approval gate. Identity-bound enterprise approver controls and tenant-scoped RBAC are in development.','Live'],
           ['Encryption','Current verified Forensic BlackBox records use AWS KMS encryption at rest.','Verified'],
           ['Auditability','Detection, risk, authority, remediation, rollback, verification, and outcome can produce evidence.','Live foundation'],
-          ['Tenant Isolation','Enforced by identity, authorization, policy, and the data layer—never by an AI prompt.','In development'],
+          ['Tenant Isolation','Designed to be enforced by identity, authorization, policy, and the data layer—never by an AI prompt.','In development'],
           ['Business Continuity','Restore point and rollback foundations are verified; broader DR controls continue to expand.','In development'],
         ].map(([title,copy,status])=><div key={title} className="bg-[#070708] p-6"><div className="flex items-center justify-between gap-3"><ShieldCheck className="h-4 w-4 text-emerald-400"/><span className={status==='In development'?'status-development':'status-live'}>{status}</span></div><h3 className="mt-5 text-[15px] text-white">{title}</h3><p className="mt-2 text-[13px] leading-6 text-white/55">{copy}</p></div>)}</div>
       </InfoSection>
 
       <InfoSection title="Responsible AI">
+        <p>AI must never receive data outside the authenticated tenant and authorized role scope. Tenant-scoped RBAC and isolation are architecture requirements currently in development.</p>
         <div className="grid gap-6 md:grid-cols-2">
-          <div className="border-t border-emerald-500/30 pt-5"><div className="text-[11px] uppercase tracking-[0.18em] text-emerald-400">AI can</div><div className="mt-5 space-y-3">{['Analyze authorized operational context','Summarize evidence','Recommend a controlled response'].map(item=><div key={item} className="flex items-center gap-3 text-[14px] text-white/70"><Check className="h-4 w-4 text-emerald-400"/>{item}</div>)}</div></div>
-          <div className="border-t border-[#FF6B1A]/30 pt-5"><div className="text-[11px] uppercase tracking-[0.18em] text-[#FF6B1A]">AI cannot</div><div className="mt-5 space-y-3">{['Increase its own privilege or change authorization','Bypass the Policy Engine or access another tenant','Authorize itself or execute approval-gated changes'].map(item=><div key={item} className="flex items-center gap-3 text-[14px] text-white/70"><X className="h-4 w-4 text-[#FF6B1A]"/>{item}</div>)}</div></div>
+          <div className="border-t border-emerald-500/30 pt-5"><div className="text-[11px] uppercase tracking-[0.18em] text-emerald-400">AI can</div><div className="mt-5 space-y-3">{['Analyze operational context made available to it','Summarize evidence','Recommend a controlled response'].map(item=><div key={item} className="flex items-center gap-3 text-[14px] text-white/70"><Check className="h-4 w-4 text-emerald-400"/>{item}</div>)}</div></div>
+          <div className="border-t border-[#FF6B1A]/30 pt-5"><div className="text-[11px] uppercase tracking-[0.18em] text-[#FF6B1A]">AI must never</div><div className="mt-5 space-y-3">{['Increase its own privilege or change authorization','Serve as the tenant-isolation or authorization control','Authorize itself or execute approval-gated changes'].map(item=><div key={item} className="flex items-center gap-3 text-[14px] text-white/70"><X className="h-4 w-4 text-[#FF6B1A]"/>{item}</div>)}</div></div>
         </div>
       </InfoSection>
 
