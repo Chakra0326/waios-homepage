@@ -50,7 +50,7 @@ export function Architecture() {
             <div className="flex items-center gap-2"><Network className="h-4 w-4 text-[#FF6B1A]"/><span className="text-[11px] tracking-widest uppercase text-white/50">Hub and Spoke direction</span></div>
             <div className="mt-7 grid md:grid-cols-3 gap-4">
               <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-5"><span className="status-reference">Internal reference</span><div className="mt-4 text-white">WAI Ecosystem</div><p className="mt-2 text-[13px] text-dim">Live environment for validating discovery, governance, remediation, rollback, audit, and infrastructure-control workflows.</p></div>
-              {['Company A Spoke','Company B Spoke'].map(x => <div key={x} className="rounded-xl border border-dashed border-white/15 bg-white/[0.02] p-5"><span className="status-roadmap">Roadmap</span><div className="mt-4 text-white">{x}</div><p className="mt-2 text-[13px] text-dimmer">Logically isolated enterprise onboarding with tenant-scoped access.</p></div>)}
+              <div className="rounded-xl border border-dashed border-white/15 bg-white/[0.02] p-5 sm:col-span-2"><span className="status-roadmap">Roadmap</span><div className="mt-4 text-white">External enterprise Spokes</div><p className="mt-2 text-[13px] text-dimmer">Future customer organizations connected through scoped, revocable identity and tenant-enforced access. This is architecture direction, not a customer deployment claim.</p></div>
             </div>
           </div>
         </Reveal>
@@ -63,6 +63,7 @@ export function Architecture() {
             <span className="status-roadmap">GCP · Roadmap</span>
           </div>
         </Reveal>
+        <Reveal><a href="/architecture" className="mt-9 inline-flex items-center gap-2 text-[13px] font-medium text-white transition hover:text-[#FF6B1A]">Open the technical reference architecture <span aria-hidden="true">→</span></a></Reveal>
       </div>
     </section>
   )

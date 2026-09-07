@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import {
   Check, Circle,
   Bell, MessagesSquare, Ticket, GitPullRequest, ClipboardList, FileSearch, Workflow,
-  KeyRound, } from 'lucide-react'
+  KeyRound, Database, History, BookOpenCheck, } from 'lucide-react'
 import { Reveal, EASE } from "./Common"
 import { useStrokeDraw } from '@/lib/useGsap'
 
@@ -35,8 +35,8 @@ export function Problem() {
         <Reveal>
           <div className="text-[12px] tracking-[0.24em] uppercase text-dimmer">The problem</div>
           <h2 className="mt-5 text-[34px] md:text-[56px] leading-[1.02] font-semibold tracking-[-0.025em] text-white text-balance max-w-3xl">
-            Every incident travels through eight tools
-            <span className="text-dim"> and no one owns the whole chain.</span>
+            Eight tools. One incident.
+            <span className="text-dim"> No accountable chain.</span>
           </h2>
           <p className="mt-5 text-[17px] md:text-[19px] leading-relaxed text-dim max-w-2xl">
             An alert lives here. Context lives there. Approval happens somewhere else. Execution
@@ -61,7 +61,7 @@ export function Problem() {
           <Reveal>
             <div className="relative h-full overflow-hidden rounded-2xl border hairline bg-black/40 p-6 dot-grid sm:p-8">
               <div className="text-[11px] tracking-widest uppercase text-dimmer">Today</div>
-              <div className="mt-2 text-white text-[18px] font-medium">Eight tools. One incident. Fragmented accountability.</div>
+              <div className="mt-2 text-white text-[18px] font-medium">Eight tools. One incident. No accountable chain.</div>
               <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {scattered.map((s, i) => {
                   const I = s.icon
@@ -128,14 +128,42 @@ export function Problem() {
         </div>
 
         <Reveal delay={0.2}>
-          <div className="mt-16 flex flex-col items-center text-center">
+          <div id="cmdb" className="mt-24 scroll-mt-24">
+            <div className="text-center">
             <div className="text-[12px] tracking-[0.24em] uppercase text-dimmer">Single Source of Truth</div>
-            <h3 className="mt-4 text-[24px] md:text-[32px] leading-[1.02] font-semibold tracking-[-0.02em] text-white text-balance max-w-2xl">
+            <h3 className="mt-4 text-[30px] md:text-[46px] leading-[1.02] font-semibold tracking-[-0.025em] text-white text-balance max-w-3xl mx-auto">
               Everything runs on one source of truth.
             </h3>
-            <p className="mt-4 text-[16px] md:text-[18px] leading-relaxed text-dim max-w-2xl">
-              Every discovery, decision, incident, remediation, and verified state change connects back to one continuously maintained CMDB, giving WAIOS the context to reason about impact rather than treating resources as isolated records.
+            <p className="mt-5 text-[16px] md:text-[18px] leading-relaxed text-dim max-w-3xl mx-auto">
+              The Autonomous CMDB continuously maintains operational context and relationships so WAIOS can reason about impact, dependencies, risk, and change rather than treating resources as isolated inventory records.
             </p>
+            </div>
+
+            <div className="mt-14 overflow-x-auto pb-3">
+              <div className="mx-auto flex min-w-[880px] max-w-5xl items-center justify-between">
+                {['Company / Service','Application','Infrastructure','Configuration / Risk','Incident / Change / Problem','WAIOS','Autonomous CMDB'].map((item, i, all) => (
+                  <div key={item} className="contents">
+                    <div className={`flex min-h-20 w-[112px] items-center justify-center border-y px-2 text-center text-[11px] leading-4 ${i === all.length - 1 ? 'border-emerald-500/35 text-emerald-300' : i === all.length - 2 ? 'border-[#FF6B1A]/35 text-white' : 'border-white/10 text-white/60'}`}>{item}</div>
+                    {i < all.length - 1 && <span className="text-white/20">→</span>}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mx-auto mt-12 grid max-w-5xl gap-0 border-y border-white/10 md:grid-cols-3 md:divide-x divide-white/10">
+              {[
+                ['CMDB','What is true now.','Current state and relationships.',Database],
+                ['BlackBox','What happened.','Events, decisions, approvals, actions, and outcomes.',History],
+                ['KEDB','What previously worked.','Verified known errors and remediation knowledge.',BookOpenCheck],
+              ].map(([title, line, copy, Icon]: any) => (
+                <div key={title} className="px-6 py-7 md:px-8">
+                  <Icon className="h-5 w-5 text-[#FF6B1A]" />
+                  <div className="mt-5 text-[12px] font-mono uppercase tracking-[0.18em] text-white/45">{title}</div>
+                  <div className="mt-2 text-[18px] text-white">{line}</div>
+                  <p className="mt-2 text-[13px] leading-relaxed text-dim">{copy}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </Reveal>
       </div>

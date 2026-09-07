@@ -1,5 +1,27 @@
 'use client'
-import { Server, Shield, Activity, Check } from 'lucide-react'
+
+import { ArrowRight, Check, Code2, GitBranch, ShieldCheck } from 'lucide-react'
 import { Reveal } from './Common'
-const columns = [['1. Detect & Understand',Server,['Resource discovered','CMDB context assembled','Risk calculated']],['2. Govern & Protect',Shield,['Policy evaluated','Restore point prepared','Human approval when required']],['3. Remediate & Learn',Activity,['Controlled action executed','Outcome verified','Rollback available','BlackBox / KEDB updated']]]
-export function SoftwareFactory(){return <section className="relative py-24 md:py-32 hairline-b"><div className="max-w-6xl mx-auto px-6"><Reveal><div className="text-center"><div className="text-[12px] tracking-[0.24em] uppercase text-dimmer">Controlled self-healing</div><h2 className="mt-5 text-[34px] md:text-[56px] leading-[1.02] font-semibold tracking-[-0.025em] text-white">Detect, remediate, verify. <span className="text-dim">Automatically.</span></h2><p className="mt-5 text-[17px] md:text-[19px] leading-relaxed text-dim max-w-3xl mx-auto">WAIOS moves infrastructure events through one governed remediation chain, from CMDB context and risk assessment to restore points, execution, verification, rollback, and learning.</p></div></Reveal><Reveal><div className="mt-16 rounded-2xl border hairline bg-[#0A0A0C] overflow-hidden grid md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/5">{columns.map(([title,Icon,items]:any)=><div key={title} className="p-7 md:p-8"><div className="h-9 w-9 rounded-lg bg-emerald-500/10 border border-emerald-500/20 grid place-items-center"><Icon className="h-4 w-4 text-emerald-400"/></div><h3 className="mt-5 text-[14px] text-white">{title}</h3><div className="mt-5 space-y-3">{items.map((x:string)=><div key={x} className="flex gap-2 text-[12px] font-mono text-white/55"><Check className="h-3.5 w-3.5 text-emerald-400 shrink-0"/>{x}</div>)}</div></div>)}</div></Reveal><Reveal><div className="mt-6 rounded-2xl border border-dashed border-white/15 bg-white/[0.02] p-6 flex flex-col md:flex-row md:items-center gap-5"><span className="status-roadmap">Roadmap</span><div><div className="text-[15px] text-white">WAI Tech — Platform Roadmap</div><p className="mt-1 text-[13.5px] text-dim">WAI Tech expands this governed automation model into code, IaC, security validation, GitOps, release governance, and production delivery.</p></div></div></Reveal></div></section>}
+
+export function SoftwareFactory() {
+  return (
+    <section className="relative py-24 md:py-32 hairline-b">
+      <div className="max-w-6xl mx-auto px-6">
+        <Reveal>
+          <div className="flex items-center gap-3"><div className="text-[12px] tracking-[0.24em] uppercase text-dimmer">WAI Tech</div><span className="status-live">Automation foundation</span></div>
+          <h2 className="mt-5 max-w-4xl text-[34px] md:text-[56px] leading-[1.02] font-semibold tracking-[-0.025em] text-white">Governed technical automation, <span className="text-dim">extending toward delivery.</span></h2>
+          <p className="mt-5 max-w-3xl text-[17px] md:text-[19px] leading-relaxed text-dim">The proven WAIOS foundation governs infrastructure discovery, risk, approval, remediation, verification, and evidence. WAI Tech extends that same control model into code and delivery.</p>
+        </Reveal>
+
+        <Reveal>
+          <div className="mt-14 grid gap-8 border-y border-white/10 py-9 md:grid-cols-[0.9fr_auto_1.2fr] md:items-center">
+            <div><span className="status-live">LIVE / VERIFIED</span><h3 className="mt-5 text-[20px] text-white">Operational automation foundation</h3><div className="mt-5 space-y-3">{['Infrastructure control','Policy & Human-in-the-Loop governance','Verified remediation & operational evidence'].map(item => <div key={item} className="flex items-center gap-2 text-[13px] text-white/65"><Check className="h-3.5 w-3.5 text-emerald-400" />{item}</div>)}</div></div>
+            <ArrowRight className="hidden h-5 w-5 text-white/20 md:block" />
+            <div><span className="status-roadmap">ROADMAP</span><h3 className="mt-5 text-[20px] text-white">Advanced software factory</h3><div className="mt-5 grid gap-4 sm:grid-cols-3">{[[Code2,'Code & IaC'],[ShieldCheck,'Security validation'],[GitBranch,'GitOps, release & production delivery']].map(([Icon,label]:any)=><div key={label} className="border-l border-white/10 pl-4"><Icon className="h-4 w-4 text-[#FF6B1A]"/><div className="mt-3 text-[12px] leading-5 text-white/60">{label}</div></div>)}</div></div>
+          </div>
+        </Reveal>
+        <Reveal><p className="mt-7 max-w-3xl text-[14px] leading-7 text-dim">WAI Tech expands WAIOS governance into code, infrastructure, security validation, release, and production delivery. The complete automated software-factory capability is not presented as live.</p></Reveal>
+      </div>
+    </section>
+  )
+}

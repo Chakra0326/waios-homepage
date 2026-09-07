@@ -21,12 +21,17 @@ export function Control() {
               Every decision follows policy. Sensitive actions require authorized human approval. Every operational step is recorded.
             </p>
           </Reveal>
+          <Reveal delay={0.08}>
+            <p className="mt-7 max-w-xl border-l border-[#FF6B1A] pl-5 text-[20px] font-medium leading-8 text-white">Autonomy does not remove authority.</p>
+            <p className="mt-3 max-w-xl text-[14px] leading-6 text-white/65">AI advises. Policy authorizes. WAIOS executes. BlackBox proves.</p>
+          </Reveal>
           <Reveal delay={0.12}>
             <div className="mt-8 space-y-3 max-w-lg">
               {[
                 { k: 'Human in the loop where it matters', v: 'Critical production actions remain behind defined authorization boundaries.' },
                 { k: 'Encrypted, auditable record', v: 'Detection, risk, approval, remediation, and outcome evidence are recorded in the Forensic BlackBox.' },
                 { k: 'Controlled, revocable access', v: 'Scoped cloud-native permissions are used rather than permanent root credentials.' },
+                { k: 'AI is not the authorization boundary', v: 'Identity and backend policy determine whether an action can execute.' },
               ].map((r) => (
                 <div key={r.k} className="flex items-start gap-3">
                   <div className="mt-1 h-1.5 w-1.5 rounded-full bg-[#FF6B1A] shrink-0" />

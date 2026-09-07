@@ -33,8 +33,8 @@ export default function App() {
       <SecurityTrust />
       <CoreBrain />
       <SoftwareFactory />
-      <Oracle />
       <Roadmap />
+      <Oracle />
       <CTA />
       <Footer floatingBarOffset />
     </div>

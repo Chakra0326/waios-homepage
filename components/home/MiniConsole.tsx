@@ -36,8 +36,8 @@ export function MiniConsole() {
           <span className="status-reference">Representative</span>
         </div>
 
-        <div className="grid grid-cols-5 gap-0">
-          <div className="col-span-3 hairline-r p-8">
+        <div className="grid grid-cols-1 gap-0 md:grid-cols-5">
+          <div className="p-5 sm:p-8 md:col-span-3 md:hairline-r">
             <div className="flex items-center justify-between mb-4">
               <div className="text-[13px] tracking-[0.18em] uppercase text-white/40">Active event</div>
               <span className="text-[13px] font-mono text-white/45">DEMO EVENT</span>
@@ -83,7 +83,7 @@ export function MiniConsole() {
             </div>
           </div>
 
-          <div className="col-span-2 p-8 space-y-5">
+          <div className="space-y-5 border-t border-white/[0.08] p-5 sm:p-8 md:col-span-2 md:border-t-0">
             <div className="rounded-xl border hairline p-5 bg-black/40">
               <div className="flex items-center justify-between">
                 <div className="text-[12px] uppercase tracking-widest text-white/40">Approval</div>
