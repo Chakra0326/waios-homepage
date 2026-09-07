@@ -36,7 +36,7 @@ export default function App() {
       <Roadmap />
       <Oracle />
       <CTA />
-      <Footer floatingBarOffset />
+      <Footer />
     </div>
   )
 }

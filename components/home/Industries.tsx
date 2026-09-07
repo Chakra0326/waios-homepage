@@ -1,11 +1,13 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import {
   Shield, Server, Building2, Landmark, Phone, ShoppingBag, Factory, Truck, Stethoscope,
   } from 'lucide-react'
 
 
 export function Industries() {
+  const [isHidden, setIsHidden] = useState(false)
   const items = [
     { icon: Landmark,    label: 'Banking' },
     { icon: Shield,      label: 'Insurance' },
@@ -17,9 +19,31 @@ export function Industries() {
     { icon: Truck,       label: 'Logistics' },
     { icon: Server,      label: 'Cloud Native' },
   ]
+
+  useEffect(() => {
+    const protectedSections = Array.from(document.querySelectorAll('#trust-deep, footer'))
+    if (!protectedSections.length) return
+
+    const intersections = new Map<Element, boolean>()
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const hasReachedBoundary = entry.isIntersecting || entry.boundingClientRect.top < 0
+        intersections.set(entry.target, hasReachedBoundary)
+      })
+      setIsHidden(Array.from(intersections.values()).some(Boolean))
+    }, { threshold: 0 })
+
+    protectedSections.forEach((section) => observer.observe(section))
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <div className="relative z-40 w-full py-4 hairline-y bg-black/80 backdrop-blur-md md:fixed md:bottom-0 md:left-0 md:py-3">
-      <div className="w-full px-6 flex flex-col md:flex-row md:items-center gap-6">
+    <div
+      id="industry-ticker"
+      aria-hidden={isHidden}
+      className={`fixed bottom-0 left-0 z-40 w-full py-3 hairline-y bg-black/80 backdrop-blur-md transition duration-300 ease-out will-change-transform ${isHidden ? 'translate-y-full opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'}`}
+    >
+      <div className="w-full px-4 md:px-6 flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
         <div className="text-[11.5px] tracking-[0.22em] uppercase text-dimmer md:w-72 shrink-0">Designed for complex operations across</div>
         <div className="relative overflow-hidden mask-fade-r flex-1">
           <div className="marquee-track flex w-max items-center whitespace-nowrap">
