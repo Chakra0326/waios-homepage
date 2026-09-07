@@ -5,6 +5,20 @@ export const metadata = {
   title: 'WAIOS · The Operating Layer for Autonomous Enterprise Operations',
   description:
     'WAIOS connects enterprise systems, AI reasoning, governance, approval, execution and learning into one accountable operational loop.',
+  openGraph: {
+    images: [
+      {
+        url: '/WAIOS-OG-optimized.jpeg',
+        width: 1200,
+        height: 630,
+        alt: 'WAIOS',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/WAIOS-OG-optimized.jpeg'],
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
