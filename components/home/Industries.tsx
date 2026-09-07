@@ -21,19 +21,14 @@ export function Industries() {
   ]
 
   useEffect(() => {
-    const protectedSections = Array.from(document.querySelectorAll('#trust-deep, footer'))
-    if (!protectedSections.length) return
+    const footer = document.querySelector('footer')
+    if (!footer) return
 
-    const intersections = new Map<Element, boolean>()
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        const hasReachedBoundary = entry.isIntersecting || entry.boundingClientRect.top < 0
-        intersections.set(entry.target, hasReachedBoundary)
-      })
-      setIsHidden(Array.from(intersections.values()).some(Boolean))
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsHidden(entry.isIntersecting || entry.boundingClientRect.top < 0)
     }, { threshold: 0 })
 
-    protectedSections.forEach((section) => observer.observe(section))
+    observer.observe(footer)
     return () => observer.disconnect()
   }, [])
 
