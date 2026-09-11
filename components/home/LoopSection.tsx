@@ -79,8 +79,9 @@ export function Loop() {
             One event. <span className="text-dim">One accountable chain.</span>
           </h2>
           <p className="mt-5 text-[17px] md:text-[19px] leading-relaxed text-dim max-w-2xl">
-            Discover → Understand → Decide → Approve → Act → Verify → Learn. Every operation follows the same governed, evidence-backed loop.
+            Detect → Understand → Decide → Approve → Act → Verify → Learn. Every operation follows the same governed, evidence-backed loop.
           </p>
+          <p className="mt-4 text-[16px] leading-relaxed text-white/75">AI advises. Policy authorizes. WAIOS executes. BlackBox proves.</p>
         </Reveal>
 
         <div className="mt-14 grid lg:grid-cols-12 gap-10 items-center">

@@ -5,10 +5,10 @@ import { Reveal, LiveDot } from "./Common"
 import { MiniConsole } from "./MiniConsole"
 
 const trustSignals = [
-  'ITIL-aligned operations',
-  'ISO control-mapped architecture',
-  'AWS Live',
-  'Human-Governed Autonomy',
+  'AWS Foundation Verified',
+  'Policy-Governed',
+  'Human-in-the-Loop',
+  'Evidence-Driven',
 ]
 
 export function Hero() {
@@ -17,19 +17,19 @@ export function Hero() {
       <div className="max-w-7xl mx-auto px-6 w-full flex flex-col items-center text-center">
         <Reveal>
           <div className="inline-flex items-center gap-2 rounded-full border hairline px-3 py-1 text-[11.5px] text-white/70 mb-8">
-            <LiveDot /> The autonomous enterprise operating system
+            <LiveDot /> The autonomous enterprise operations system
           </div>
         </Reveal>
         
         <Reveal delay={0.05}>
           <h1 className="text-[42px] sm:text-[52px] md:text-[80px] lg:text-[96px] leading-[1.02] md:leading-[1.05] font-semibold tracking-[-0.04em] text-white text-balance max-w-4xl mx-auto">
-            Deploy Once, Govern Globally. <span className="text-dim">The Enterprise CMDB Factory.</span>
+            From Detection to Resolution. <span className="block text-[#FF6B1A]">Autonomously.</span>
           </h1>
-          <p className="mt-6 text-[19px] md:text-[30px] font-medium tracking-[-0.02em] text-white">
-            From detection to resolution. <span className="text-[#FF6B1A]">Autonomously.</span>
-          </p>
           <p className="mt-6 text-[16px] md:text-[20px] leading-relaxed text-dim max-w-3xl mx-auto text-balance">
-            WAIOS continuously discovers infrastructure, assembles operational context through its CMDB, evaluates risk, routes approval where required, executes controlled remediation, verifies the outcome, and records the complete operational chain.
+            WAIOS continuously discovers, understands, governs, and resolves infrastructure changes—through policy-controlled execution, human approval when required, and verifiable evidence.
+          </p>
+          <p className="mt-4 text-[14px] md:text-[16px] leading-relaxed text-dim max-w-3xl mx-auto text-balance">
+            Its CMDB grounds every decision in infrastructure context, dependencies, and risk. Approved remediation is verified, preserved in BlackBox, and retained as knowledge in KEDB.
           </p>
         </Reveal>
         

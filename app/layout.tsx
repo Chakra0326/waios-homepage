@@ -2,9 +2,9 @@ import './globals.css'
 import { Providers } from './providers'
 
 export const metadata = {
-  title: 'WAIOS · The Operating Layer for Autonomous Enterprise Operations',
+  title: 'WAIOS · From Detection to Resolution. Autonomously.',
   description:
-    'WAIOS connects enterprise systems, AI reasoning, governance, approval, execution and learning into one accountable operational loop.',
+    'WAIOS is an autonomous enterprise operations system that discovers infrastructure, understands dependencies and risk, governs decisions through policy, executes approved remediation, verifies outcomes, and preserves evidence.',
   openGraph: {
     images: [
       {

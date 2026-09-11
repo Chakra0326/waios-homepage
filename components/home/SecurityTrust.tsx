@@ -4,7 +4,7 @@ import { ArrowRight, Cloud, KeyRound, Layers3, LifeBuoy, LockKeyhole } from 'luc
 import { Reveal } from './Common'
 
 const protections = [
-  { title: 'Identity & Access', body: 'Current AWS controls use scoped cloud-native access patterns. Identity-bound enterprise approver controls remain in development.', icon: KeyRound, status: 'In development', statusClass: 'status-development' },
+  { title: 'Identity & Access', body: 'Current AWS controls use scoped cloud-native access patterns. Identity-bound authorization, enterprise approver controls, and tenant-scoped RBAC are required before external enterprise onboarding.', icon: KeyRound, status: 'In development', statusClass: 'status-development' },
   { title: 'Encryption', body: 'Forensic BlackBox records are encrypted at rest using AWS KMS. Full WORM immutability is not claimed.', icon: LockKeyhole, status: 'Verified', statusClass: 'status-live' },
   { title: 'Tenant Isolation', body: 'Designed to be enforced by identity, authorization, policy, and the data layer—never by an AI prompt.', icon: Layers3, status: 'In development', statusClass: 'status-development' },
   { title: 'Business Continuity', body: 'Restore and rollback foundations are verified. Broader DR controls and failover capabilities continue to be developed.', icon: LifeBuoy, status: 'In development', statusClass: 'status-development' },
@@ -18,6 +18,13 @@ export function SecurityTrust() {
           <div className="text-[12px] tracking-[0.24em] uppercase text-dimmer">Security &amp; Trust</div>
           <h2 className="mt-5 text-[34px] md:text-[56px] leading-[1.02] font-semibold tracking-[-0.025em] text-white">Protected by architecture, <span className="text-dim">not promises.</span></h2>
           <p className="mt-5 max-w-3xl text-[17px] md:text-[19px] leading-relaxed text-dim">A compact view of the current protection model and the controls still being built. Detailed authority, Responsible AI, BlackBox, continuity, and compliance information lives in the Security &amp; Trust center.</p>
+        </Reveal>
+
+        <Reveal>
+          <div className="mt-8 border-l border-[#FF6B1A]/60 pl-5">
+            <h3 className="text-[16px] font-medium text-white">External enterprise onboarding gate</h3>
+            <p className="mt-2 max-w-3xl text-[16px] leading-relaxed text-dim">Tenant isolation and identity-bound authorization / RBAC must be implemented and verified before external enterprise Spokes are onboarded. These controls remain in development; WAI Ecosystem is the current internal reference environment.</p>
+          </div>
         </Reveal>
 
         <div className="mt-14 grid gap-px overflow-hidden border-y border-white/10 bg-white/10 md:grid-cols-2">

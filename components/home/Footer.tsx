@@ -17,7 +17,7 @@ export function Footer() {
             <div className="grid h-6 w-6 place-items-center rounded-md bg-white"><div className="h-2 w-2 rounded-[2px] bg-black" /></div>
             <span className="text-[15px] font-medium text-white">WAIOS</span>
           </a>
-          <p className="mt-4 max-w-xs text-[13px] text-dim">The autonomous enterprise operating system. Governed by design.</p>
+          <p className="mt-4 max-w-xs text-[13px] text-dim">The autonomous enterprise operations system. Governed by design.</p>
           <p className="mt-6 text-[17px] text-white">From detection to resolution.<br /><span className="text-[#FF6B1A]">Autonomously.</span></p>
           <div className="mt-5 inline-flex items-center gap-1.5 text-[11px] text-dimmer"><LiveDot />AWS foundation live</div>
         </div>

@@ -29,6 +29,14 @@ export default function SecurityPage() {
         ].map(([title,copy,status])=><div key={title} className="bg-[#070708] p-6"><div className="flex items-center justify-between gap-3"><ShieldCheck className="h-4 w-4 text-emerald-400"/><span className={status==='In development'?'status-development':'status-live'}>{status}</span></div><h3 className="mt-5 text-[15px] text-white">{title}</h3><p className="mt-2 text-[13px] leading-6 text-white/55">{copy}</p></div>)}</div>
       </InfoSection>
 
+      <InfoSection title="External enterprise onboarding gate" label="Priority engineering requirement · In development">
+        <p>Tenant isolation and identity-bound authorization / RBAC are blockers for external enterprise onboarding. They must be implemented and verified before separate customer Spokes are connected. WAI Ecosystem remains the internal reference environment.</p>
+        <div className="rounded-2xl border hairline bg-[#0A0A0C] p-6">
+          <p className="text-[16px] leading-8 text-white">Tenant A identity → Tenant A policy → Tenant A CMDB → Tenant A credentials → Tenant A execution → Tenant A BlackBox</p>
+        </div>
+        <p>Each tenant requires this complete boundary. AI reasoning, retrieval, execution context, and operational evidence must remain within the authenticated tenant and authorized role scope, including CMDB, BlackBox, and KEDB access. Identity, authorization, policy, and data-layer controls must enforce isolation; an AI prompt cannot provide it.</p>
+      </InfoSection>
+
       <InfoSection title="Responsible AI">
         <p>AI must never receive data outside the authenticated tenant and authorized role scope. Tenant-scoped RBAC and isolation are architecture requirements currently in development.</p>
         <div className="grid gap-6 md:grid-cols-2">

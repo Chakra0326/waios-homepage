@@ -42,6 +42,7 @@ export default function ArchitecturePage() {
       <InfoSection title="Hub / Master and Spoke">
         <div className="grid gap-4 md:grid-cols-2"><SignalCard label="WAIOS = Hub / Master">The central control plane for operational intelligence, CMDB context, risk, governance, remediation, verification, and evidence.</SignalCard><SignalCard label="Spoke = a company using WAIOS">A company—not merely one AWS account. A Spoke may connect multiple authorized environments and business systems while retaining ownership and control.</SignalCard></div>
         <p>WAI Ecosystem is the current internal live reference environment. External enterprise Spoke onboarding is <span className="status-roadmap">roadmap</span>. Tenant-scoped RBAC and isolation are <span className="status-development">in development</span>. Azure and Google Cloud connectivity remain <span className="status-roadmap">roadmap</span>.</p>
+        <p>External enterprise onboarding is blocked until tenant isolation and identity-bound authorization / RBAC are implemented and verified. Each tenant must retain its own identity → policy → CMDB → credentials → execution → BlackBox boundary, with tenant-scoped KEDB access. AI reasoning, retrieval, execution context, and operational evidence must never cross that boundary.</p>
       </InfoSection>
 
       <InfoSection title="Why the boundary matters">

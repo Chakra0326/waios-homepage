@@ -56,7 +56,7 @@ export function LiveDot({ className = 'text-emerald-400' }: { className?: string
 }
 
 export const LOOP = [
-  { key: 'discover', label: 'Discover', icon: Radar, caption: 'Infrastructure state and events are discovered.', detail: 'AWS inventory, configuration, and event sources feed the current operational picture.' },
+  { key: 'discover', label: 'Detect', icon: Radar, caption: 'Infrastructure changes and drift are detected.', detail: 'Continuous discovery through AWS inventory, configuration, and event sources feeds the current operational picture.' },
   { key: 'understand', label: 'Understand', icon: Brain,    caption: 'Context is assembled. Risk is measured.', detail: 'Every signal is cross-referenced against the CMDB to build full context: what changed, what it affects, and how severe it is. Risk is scored automatically before any decision is made.' },
   { key: 'decide',     label: 'Decide',     icon: Sparkles, caption: 'A plan is proposed, scored against impact.', detail: "A remediation plan is generated and scored against business impact, including a rollback path, before it's ever put in front of a human." },
   { key: 'approve', label: 'Approve', icon: Gavel, caption: 'Policy determines where human review is required.', detail: 'Low-risk actions may be policy-approved; critical actions require Human-in-the-Loop approval.' },

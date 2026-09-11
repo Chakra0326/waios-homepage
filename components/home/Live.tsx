@@ -9,18 +9,19 @@ import { Reveal, LiveDot } from "./Common"
 import { useEventStreamReveal } from '@/lib/useGsap'
 
 export const SCENARIO = [
-  { phase: 'DISCOVER', text: 'Infrastructure drift detected.' },
-  { phase: 'DISCOVER', text: 'Affected resource identified through CMDB context.' },
+  { phase: 'DETECT', text: 'Infrastructure drift detected.' },
+  { phase: 'DETECT', text: 'Affected resource identified through CMDB context.' },
   { phase: 'UNDERSTAND', text: 'Operational dependencies assembled.' },
   { phase: 'UNDERSTAND', text: 'Risk and blast radius evaluated.' },
-  { phase: 'DECIDE', text: 'Known remediation knowledge checked.' },
+  { phase: 'DECIDE', text: 'Known Error Database (KEDB) checked for a verified remediation.' },
   { phase: 'DECIDE', text: 'Restore and rollback path prepared.' },
   { phase: 'APPROVE', text: 'Governance policy evaluated.' },
   { phase: 'APPROVE', text: 'Human-in-the-Loop approval required for high-impact action.' },
-  { phase: 'ACT', text: 'Controlled remediation executed.' },
+  { phase: 'APPROVE', text: 'On-call reviewer approves the proposed remediation within policy.' },
+  { phase: 'ACT', text: 'Approved remediation executed within the authorized scope.' },
   { phase: 'VERIFY', ok: true, text: 'Result validated against expected infrastructure state.' },
-  { phase: 'LEARN', ok: true, text: 'CMDB updated and encrypted audit record written.' },
-  { phase: 'LEARN', ok: true, text: 'Successful remediation knowledge retained.' },
+  { phase: 'LEARN', ok: true, text: 'CMDB updated; authorization, execution, and verification evidence written to BlackBox.' },
+  { phase: 'LEARN', ok: true, text: 'Verified remediation and outcome retained in KEDB.' },
 ]
 
 export function Live() {
@@ -35,7 +36,7 @@ export function Live() {
   }, [])
 
   const currentPhase = SCENARIO[SCENARIO.length - 1].phase
-  const phases = ['DISCOVER','UNDERSTAND','DECIDE','APPROVE','ACT','VERIFY','LEARN']
+  const phases = ['DETECT','UNDERSTAND','DECIDE','APPROVE','ACT','VERIFY','LEARN']
   const phaseIndex = phases.indexOf(currentPhase)
 
   return (
@@ -47,7 +48,7 @@ export function Live() {
             See the autonomous loop <span className="text-dim">in action.</span>
           </h2>
           <p className="mt-5 text-[17px] md:text-[19px] leading-relaxed text-dim max-w-2xl">
-            A representative WAIOS workflow showing how an operational event moves from detection through risk evaluation, governance, remediation, verification, and learning.
+            Follow one infrastructure drift incident from detection to verified resolution: the affected resource, dependencies, blast radius, KEDB, rollback plan, policy, human approval, and remediation. The representative workflow closes with CMDB, BlackBox, and KEDB updates.
           </p>
         </Reveal>
 
@@ -131,7 +132,7 @@ export function Live() {
                 </div>
                 <div className="mt-3 inline-flex items-center gap-1.5 text-[11.5px] text-emerald-400">
                   <Check className="h-3.5 w-3.5" />
-                  policy satisfied
+                  remediation approved
                 </div>
               </div>
               <div data-side-panel className="rounded-2xl border hairline bg-black/60 p-5">
@@ -148,6 +149,7 @@ export function Live() {
                   <div className="text-[10.5px] tracking-[0.2em] uppercase text-dimmer">Audit trail</div>
                   <span className="text-[10.5px] font-mono text-white/50">encrypted · auditable</span>
                 </div>
+                <p className="mt-3 text-[14px] leading-6 text-white/65">Who authorized what, what executed, whether state recovered, and what the system learned.</p>
                 <div className="mt-3 grid grid-cols-3 gap-3 text-[12px]">
                   <div>
                     <div className="text-white/40 uppercase tracking-widest text-[9.5px]">record</div>
