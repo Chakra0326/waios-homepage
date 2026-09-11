@@ -26,10 +26,7 @@ export function Hero() {
             From Detection to Resolution. <span className="block text-[#FF6B1A]">Autonomously.</span>
           </h1>
           <p className="mt-6 text-[16px] md:text-[20px] leading-relaxed text-dim max-w-3xl mx-auto text-balance">
-            WAIOS continuously discovers, understands, governs, and resolves infrastructure changes—through policy-controlled execution, human approval when required, and verifiable evidence.
-          </p>
-          <p className="mt-4 text-[14px] md:text-[16px] leading-relaxed text-dim max-w-3xl mx-auto text-balance">
-            Its CMDB grounds every decision in infrastructure context, dependencies, and risk. Approved remediation is verified, preserved in BlackBox, and retained as knowledge in KEDB.
+            WAIOS continuously discovers infrastructure, assembles operational context through its CMDB, evaluates risk, routes approval where required, executes controlled remediation, verifies the outcome, and records the complete operational chain.
           </p>
         </Reveal>
         
